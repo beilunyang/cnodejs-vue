@@ -23,18 +23,27 @@ const state = {
     name: '招聘',
     ename: 'job',
   }],
+  currentTab: '',
   isLogin: false,
   topicLists: [],
+  topic: '',
 };
 
 const mutations = {
-  GET_TOPIC_LISTS_SUCCESS(state, topicLists) {
-    console.log(topicLists);
+  GET_TOPIC_LISTS_SUCCESS(state, topicLists, topicTab) {
     state.topicLists = topicLists;
+    state.currentTab = topicTab;
   },
 
-  GET_TOPIC_LISTS_FAILURE(state) {
+  GET_TOPIC_LISTS_FAILURE(state, topicTab) {
     state.topicLists = [];
+    state.currentTab = topicTab;
+  },
+  GET_TOPIC_SUCCESS(state, topic) {
+    state.topic = topic;
+  },
+  GET_TOPIC_FAILURE() {
+    state.topic = '获取文章内容失败';
   },
 };
 

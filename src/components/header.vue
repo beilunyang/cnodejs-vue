@@ -5,9 +5,9 @@
     </a>
 		<input type="search" class="search">
 		<ul class="navbar">
-			<li><a href="#">首页</a></li>
+			<li><a href="/">首页</a></li>
 			<li><a href="#">关于</a></li>
-			<li><a href="#">登入</a></li>
+			<li><a v-link="{name: 'login'}">登入</a></li>
 		</ul>
 	</header>
 </template>

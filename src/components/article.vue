@@ -1,19 +1,21 @@
 <template>
   <article class="panel">
     <div class="panel-header article-header">
-      <h2><span class="top">置顶</span>
-        Vue.js Podcast 报名中，尤小右、勾三股四带你畅聊
+      <h2>
+        <span class="top" v-if="topic.top">置顶</span>
+        <span class="top" v-else v-if="topic.good">精华</span>
+        {{ topic.title }}
       </h2>
       <div class="info">
-        <span>发布于</span>
-        <span>作者</span>
-        <span>次浏览</span>
-        <span>来自</span>
+        <span>发布于{{ topic.create_at | timeToNow }}</span>
+        <span>作者{{ topic.author.loginname }}</span>
+        <span>{{ topic.visit_count }}次浏览</span>
+        <span>来自 {{ topic.tab | transTab }}</span>
       </div>
     </div>
     <div class="inner padding">
       <div class="article-content">
-
+        {{{ topic.content }}}
       </div>
     </div>
 
@@ -21,8 +23,13 @@
 </template>
 
 <script>
+  import { getTopic } from '../vuex/getters';
   export default {
-
+    vuex: {
+      getters: {
+        topic: getTopic,
+      },
+    },
   };
 </script>
 

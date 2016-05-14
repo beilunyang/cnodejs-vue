@@ -10,10 +10,21 @@
 <script>
   import cSiderbar from '../components/siderbar';
   import cArticle from '../components/article';
+  import { fetchTopic } from '../vuex/actions';
   export default {
     components: {
       cSiderbar,
       cArticle,
+    },
+    vuex: {
+      actions: {
+        fetchTopic,
+      },
+    },
+    route: {
+      data({ to: { params: { id } } }) {
+        this.fetchTopic(id);
+      },
     },
   };
 </script>

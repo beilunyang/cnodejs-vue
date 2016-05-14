@@ -14,5 +14,10 @@ export default (router) => router.map({
     component: require('./views/post'),
   },
 
+  '/login': {
+    name: 'login',
+    component: require('./views/login'),
+  },
+
 });
 

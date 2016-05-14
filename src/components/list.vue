@@ -1,7 +1,7 @@
 <template>
   <div class="panel">
     <div class="panel-header">
-      <a v-link="{name: 'tab', params: {tab: tab.ename}}" v-for="tab in topicTabs">{{ tab.name }}</a>
+      <a v-link="{name: 'tab', params: {tab: tab.ename}}" v-for="tab in topicTabs" :class="tab.ename === currentTab ? 'active' : ''">{{ tab.name }}</a>
     </div>
 
     <div class="inner">
@@ -19,7 +19,9 @@
             <span>{{ topicItem.last_reply_at | timeToNow }}</span>
           </a>
           <div class="topic-wrapper">
-            <span class="top">{{ topicItem.tab | transTab }}</span>
+            <span class="top" v-if="topicItem.top">置顶</span>
+            <span class="top" v-else v-if="topicItem.good">精华</span>
+            <span class="top normal" v-if="!topicItem.top && !topicItem.good">{{ topicItem.tab | transTab }}</span>
             <a v-link="{name: 'post', params: {id: topicItem.id}}" title=" {{ topicItem.title }}"> {{ topicItem.title }}</a>
           </div>
         </div>
@@ -31,15 +33,15 @@
 </template>
 
 <script>
-  import { getTopicTabs, getTopicLists } from '../vuex/getters';
+  import { getTopicTabs, getTopicLists, getCurrentTab } from '../vuex/getters';
   export default {
     vuex: {
       getters: {
         topicTabs: getTopicTabs,
         topicLists: getTopicLists,
+        currentTab: getCurrentTab,
       },
     },
-
   };
 </script>
 
@@ -59,6 +61,10 @@
     background-color: #F6F6F6;
     padding: 10px;
     border-radius: 3px 3px 0 0;
+
+    span {
+      color: #999;
+    }
 
     a {
       color: #80BD01;
@@ -144,10 +150,21 @@
     border-radius: 3px;
   }
 
+  .normal {
+    background-color: #E5E5E5;
+    color: #999;
+  }
+
   .topic-wrapper {
     a {
+      max-width: 70%;
       color: #333;
       line-height: 30px;
+      overflow: hidden;
+      vertical-align: middle;
+      display: inline-block;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
   }
 
