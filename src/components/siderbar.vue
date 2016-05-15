@@ -1,25 +1,26 @@
 <template>
   <div class="siderbar">
-    <div class="panel">
+    <div class="panel" v-if="token">
       <div class="panel-header">
         个人信息
       </div>
       <div class="inner padding">
         <div class="user-info">
-          <a href="#"><img src="https://avatars.githubusercontent.com/u/13795713?v=3&s=120" alt="user_avator"></a>
-          <a href="#" class="user-name">beilunyang</a>
-          <div class="user-score">积分：1000</div>
-          <div class="user-signature">"人生苦短, 及时行乐"</div>
+          <a href="#"><img :src="user.avatar" alt="avatar"></a>
+          <a href="#" class="user-name">{{ user.loginName }}</a>
+          <div class="user-score">积分：{{ user.score }}</div>
+          <!-- <div class="user-signature">"人生苦短, 及时行乐"</div> -->
         </div>
       </div>
     </div>
-    <div class="panel">
+
+    <div class="panel" v-if="token">
       <div class="inner padding">
         <a href="#" class="btn btn-success">发布话题</a>
       </div>
     </div>
 
-    <div class="panel">
+    <div class="panel" v-if="!token">
       <div class="panel-header">CNode：Node.js专业中文社区</div>
       <div class="inner padding">
         <div class="sign-about">您可以通过accessToken登入</div>
@@ -30,7 +31,15 @@
 </template>
 
 <script>
-  export default {};
+  import { getToken, getUser } from '../vuex/getters';
+  export default {
+    vuex: {
+      getters: {
+        token: getToken,
+        user: getUser,
+      },
+    },
+  };
 </script>
 
 <style lang='scss'>

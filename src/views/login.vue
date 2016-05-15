@@ -3,14 +3,14 @@
     <div class="panel">
       <div class="panel-header">
         <a href="/" class="home">主页</a>
-        <span>/</span>
-        <span>登入</span>
+        <span class="c">/ </span>
+        <span class="c"> 登入</span>
       </div>
       <div class="inner padding login">
-        <p v-show="!tokenAvail" class="prompt">请输入正确的token</p>
+        <p v-show="!tokenAvail" class="prompt">请输入有效的token</p>
         <div class="login-form">
           <label for="token">accessToken:</label>
-          <input type="text" id="token" maxlength="36" @change="changeToken" @focus="changeTokenAvail(true)">
+          <input type="text" id="token" maxlength="36" @change="changeToken($event.target.value)" @focus="changeTokenAvail(true)">
         </div>
         <a href="#" class="btn btn-primary" @click.prevent.stop="login">登入</a>
       </div>
@@ -23,7 +23,7 @@
 
 <script>
   import { getToken, getTokenAvail } from '../vuex/getters';
-  import { changeTokenAvail, changeToken } from '../vuex/actions';
+  import { changeTokenAvail, changeToken, checkToken, fetchUser } from '../vuex/actions';
   export default {
     vuex: {
       getters: {
@@ -33,6 +33,8 @@
       actions: {
         changeTokenAvail,
         changeToken,
+        checkToken,
+        fetchUser,
       },
     },
     methods: {
@@ -41,6 +43,15 @@
           this.changeTokenAvail(false);
         } else {
           this.changeTokenAvail(true);
+          this.checkToken(this.token)
+          .then((loginName) => {
+            this.fetchUser(loginName);
+            const d = new Date();
+            d.setTime(d.getTime() + 2 * 24 * 60 * 60 * 1000);
+            const expires = d.toGMTString();
+            document.cookie = `token=${this.token};expires=${expires}`;
+            window.router.go('/');
+          });
         }
       },
     },
@@ -62,6 +73,10 @@
       margin-right: 15px;
     }
 
+  }
+
+  .c {
+    color: #999;
   }
 
   .prompt {

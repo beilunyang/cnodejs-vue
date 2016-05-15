@@ -26,4 +26,46 @@ export const fetchTopic = ({ dispatch }, id) => {
 
 export const changeTokenAvail = ({ dispatch }, isAvail) => dispatch('CHANGE_TOKEN_AVAIL', isAvail);
 
-export const changeToken = ({ dispatch }, event) => dispatch('CHANGE_TOKEN', event.target.value);
+export const changeToken = ({ dispatch }, value) => dispatch('CHANGE_TOKEN', value);
+
+export const checkToken = ({ dispatch }, accesstoken) => {
+  const pro = new Promise((resolve) => {
+    fetch('https://cnodejs.org/api/v1/accesstoken', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        accesstoken,
+      }),
+    })
+    .then((res) => {
+      if (res.status >= 200 && res.status < 300) {
+        return res.json();
+      }
+      throw new Error(res.statusText);
+    })
+    .then((json) => {
+      dispatch('CHECK_TOKEN_SUCCESS', json.loginname);
+      resolve(json.loginname);
+    })
+    .catch(() => {
+      dispatch('CHECK_TOKEN_FAILURE');
+    });
+  });
+  return pro;
+};
+
+export const fetchUser = ({ dispatch }, loginName) => {
+  fetch(`https://cnodejs.org/api/v1/user/${loginName}`)
+    .then((res) => {
+      if (res.status >= 200 && res.status < 300) {
+        return res.json();
+      }
+      throw new Error(res.statusText);
+    })
+    .then((json) => dispatch('FETCH_USER_SUCCESS', json.data))
+    .catch(() => dispatch('FETCH_USER_FAILURE'));
+};
+

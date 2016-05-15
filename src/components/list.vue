@@ -62,10 +62,6 @@
     padding: 10px;
     border-radius: 3px 3px 0 0;
 
-    span {
-      color: #999;
-    }
-
     a {
       color: #80BD01;
       padding: 3px 4px;

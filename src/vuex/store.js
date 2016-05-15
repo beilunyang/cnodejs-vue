@@ -24,11 +24,15 @@ const state = {
     ename: 'job',
   }],
   currentTab: '',
-  isLogin: false,
   topicLists: [],
   topic: '',
   token: '',
   tokenAvail: true,
+  user: {
+    loginName: '',
+    score: '',
+    avatar: '',
+  }, //user: { } 就不能显示插值
 };
 
 const mutations = {
@@ -36,7 +40,6 @@ const mutations = {
     state.topicLists = topicLists;
     state.currentTab = topicTab;
   },
-
   FETCH_TOPIC_LISTS_FAILURE(state, topicTab) {
     state.topicLists = [];
     state.currentTab = topicTab;
@@ -52,6 +55,16 @@ const mutations = {
   },
   CHANGE_TOKEN(state, token) {
     state.token = token;
+  },
+  CHECK_TOKEN_SUCCESS(state, loginName) {
+    state.user.loginName = loginName;
+  },
+  CHECK_TOKEN_FAILURE(state) {
+    state.tokenAvail = false;
+  },
+  FETCH_USER_SUCCESS(state, info) {
+    state.user.avatar = info.avatar_url;
+    state.user.score = info.score;
   },
 };
 
