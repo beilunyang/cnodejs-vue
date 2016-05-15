@@ -7,11 +7,12 @@
         <span>登入</span>
       </div>
       <div class="inner padding login">
+        <p v-show="!tokenAvail" class="prompt">请输入正确的token</p>
         <div class="login-form">
           <label for="token">accessToken:</label>
-          <input type="text" id="token">
+          <input type="text" id="token" maxlength="36" @change="changeToken" @focus="changeTokenAvail(true)">
         </div>
-        <a href="#" class="btn btn-primary">登入</a>
+        <a href="#" class="btn btn-primary" @click.prevent.stop="login">登入</a>
       </div>
     </div>
   </div>
@@ -21,6 +22,29 @@
 </template>
 
 <script>
+  import { getToken, getTokenAvail } from '../vuex/getters';
+  import { changeTokenAvail, changeToken } from '../vuex/actions';
+  export default {
+    vuex: {
+      getters: {
+        token: getToken,
+        tokenAvail: getTokenAvail,
+      },
+      actions: {
+        changeTokenAvail,
+        changeToken,
+      },
+    },
+    methods: {
+      login() {
+        if (this.token.length !== 36) {
+          this.changeTokenAvail(false);
+        } else {
+          this.changeTokenAvail(true);
+        }
+      },
+    },
+  };
 </script>
 
 <style lang="scss">
@@ -30,7 +54,8 @@
 
   .login {
     text-align: center;
-    padding: 50px 0;
+    padding: 70px 0;
+    position: relative;
 
     label {
       cursor: pointer;
@@ -39,8 +64,18 @@
 
   }
 
+  .prompt {
+    background-color: #F2DEDE;
+    color: #B94A48;
+    position: absolute;
+    left: 10px;
+    top: 0;
+    right: 10px;
+    padding: 10px;
+  }
+
   .login-form {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
   }
 
   #token {

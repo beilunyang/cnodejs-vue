@@ -27,23 +27,31 @@ const state = {
   isLogin: false,
   topicLists: [],
   topic: '',
+  token: '',
+  tokenAvail: true,
 };
 
 const mutations = {
-  GET_TOPIC_LISTS_SUCCESS(state, topicLists, topicTab) {
+  FETCH_TOPIC_LISTS_SUCCESS(state, topicLists, topicTab) {
     state.topicLists = topicLists;
     state.currentTab = topicTab;
   },
 
-  GET_TOPIC_LISTS_FAILURE(state, topicTab) {
+  FETCH_TOPIC_LISTS_FAILURE(state, topicTab) {
     state.topicLists = [];
     state.currentTab = topicTab;
   },
-  GET_TOPIC_SUCCESS(state, topic) {
+  FETCH_TOPIC_SUCCESS(state, topic) {
     state.topic = topic;
   },
-  GET_TOPIC_FAILURE() {
+  FETCH_TOPIC_FAILURE(state) {
     state.topic = '获取文章内容失败';
+  },
+  CHANGE_TOKEN_AVAIL(state, isAvail) {
+    state.tokenAvail = isAvail;
+  },
+  CHANGE_TOKEN(state, token) {
+    state.token = token;
   },
 };
 

@@ -23,7 +23,7 @@
       <div class="panel-header">CNode：Node.js专业中文社区</div>
       <div class="inner padding">
         <div class="sign-about">您可以通过accessToken登入</div>
-        <a href="#" class="btn btn-primary">通过token登入</a>
+        <a v-link="{name: 'login'}" class="btn btn-primary">通过token登入</a>
       </div>
     </div>
   </div>
