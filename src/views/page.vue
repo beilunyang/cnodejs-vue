@@ -1,6 +1,11 @@
 <template>
   <div class="content">
-    <c-list></c-list>
+    <div class="panel">
+      <div class="panel-header">
+        <a v-link="{name: 'tab', params: {tab: tab.ename}}"  v-for="tab in topicTabs" :class="tab.ename === currentTab ? 'active' : ''">{{ tab.name }}</a>
+      </div>
+      <c-list :items='topicLists'></c-list>
+    </div>
   </div>
   <div class="sider">
     <c-siderbar></c-siderbar>
@@ -11,6 +16,7 @@
   import cList from '../components/list';
   import cSiderbar from '../components/siderbar';
   import { fetchTopicLists } from '../vuex/actions';
+  import { getTopicTabs, getCurrentTab, getTopicLists } from '../vuex/getters';
   export default {
     components: {
       cList,
@@ -19,6 +25,11 @@
     vuex: {
       actions: {
         fetchTopicLists,
+      },
+      getters: {
+        topicTabs: getTopicTabs,
+        currentTab: getCurrentTab,
+        topicLists: getTopicLists,
       },
     },
     route: {

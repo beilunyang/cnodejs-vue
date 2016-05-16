@@ -7,37 +7,48 @@
       </div>
       <div class="inner padding">
         <div class="user-head">
-          <img src="https://avatars.githubusercontent.com/u/13795713?v=3&s=120" alt="avatar">
-          <span>beilunyang</span>
+          <img :src="user.avatar_url" alt="avatar">
+          <span>{{ user.loginname }}</span>
         </div>
         <ul class="user-profile">
-          <li>40积分</li>
+          <li>{{ user.score }}积分</li>
           <li>
             <i></i>
-            <a href="#">https://bitibiti.com</a>
+            <a :href="'https://github.com/' + user.githubUsername" target="_blank">@{{ user.githubUsername }}</a>
           </li>
-          <li>
-            <i></i>
-            <a href="#">@beilunyang</a>
-          </li>
-          <li>注册时间8个月前</li>
+          <li>注册于{{ user.create_at | timeToNow }}</li>
         </ul>
       </div>
     </div>
 
-    <c-list></c-list>
+    <div class="panel">
+      <div class="panel-header">
+        最近创建的话题
+      </div>
+      <c-list :items='user.recent_topics'></c-list>
+    </div>
 
-    <c-list></c-list>
-
+    <div class="panel">
+      <div class="panel-header">
+        最近参与的话题
+      </div>
+      <c-list :items='user.recent_replies'></c-list>
+    </div>
 
   </div>
 </template>
 
 <script>
   import cList from '../components/list';
+  import { getUser } from '../vuex/getters';
   export default {
     components: {
       cList,
+    },
+    vuex: {
+      getters: {
+        user: getUser,
+      },
     },
   };
 </script>

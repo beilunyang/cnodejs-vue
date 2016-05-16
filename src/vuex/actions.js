@@ -47,7 +47,7 @@ export const checkToken = ({ dispatch }, accesstoken) => {
       throw new Error(res.statusText);
     })
     .then((json) => {
-      dispatch('CHECK_TOKEN_SUCCESS', json.loginname);
+      dispatch('CHECK_TOKEN_SUCCESS');
       resolve(json.loginname);
     })
     .catch(() => {

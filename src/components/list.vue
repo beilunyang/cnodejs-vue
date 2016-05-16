@@ -1,47 +1,42 @@
 <template>
-  <div class="panel">
-    <div class="panel-header">
-      <a v-link="{name: 'tab', params: {tab: tab.ename}}"  v-for="tab in topicTabs" :class="tab.ename === currentTab ? 'active' : ''">{{ tab.name }}</a>
-    </div>
+  <div class="inner">
+    <div class="topic-list">
 
-    <div class="inner">
-      <div class="topic-list">
-
-        <div class="cell" v-for="topicItem in topicLists">
-          <a href="#" class="avatar"><img :src="topicItem.author.avatar_url" alt="avator"></a>
-          <span class="info-count">
-            <span class="reply-count">{{ topicItem.reply_count }}</span>
-            <span class="seperator">/</span>
-            <span class="visited-count">{{ topicItem.visit_count }}</span>
-          </span>
-          <a href="#" class="last-time">
-            <img src="https://avatars.githubusercontent.com/u/3118295?v=3&s=120" alt="avator">
-            <span>{{ topicItem.last_reply_at | timeToNow }}</span>
-          </a>
-          <div class="topic-wrapper">
+      <div class="cell" v-for="topicItem in items">
+        <a href="#" class="avatar"><img :src="topicItem.author.avatar_url" alt="avator"></a>
+        <span class="info-count" v-if="topicItem.author_id">
+          <span class="reply-count">{{ topicItem.reply_count }}</span>
+          <span class="seperator">/</span>
+          <span class="visited-count">{{ topicItem.visit_count }}</span>
+        </span>
+        <a href="#" class="last-time">
+          <img src="https://avatars.githubusercontent.com/u/3118295?v=3&s=120" alt="avator">
+          <span>{{ topicItem.last_reply_at | timeToNow }}</span>
+        </a>
+        <div class="topic-wrapper">
+          <template v-if="topicItem.author_id">
             <span class="top" v-if="topicItem.top">置顶</span>
             <span class="top" v-else v-if="topicItem.good">精华</span>
             <span class="top normal" v-if="!topicItem.top && !topicItem.good">{{ topicItem.tab | transTab }}</span>
-            <a v-link="{name: 'post', params: {id: topicItem.id}}" title=" {{ topicItem.title }}"> {{ topicItem.title }}</a>
-          </div>
+          </template>
+          <span class="hello" v-else></span>
+          <a v-link="{name: 'post', params: {id: topicItem.id}}" title=" {{ topicItem.title }}"> {{ topicItem.title }}</a>
         </div>
-
       </div>
-    </div>
 
+    </div>
   </div>
 </template>
 
 <script>
-  import { getTopicTabs, getTopicLists, getCurrentTab } from '../vuex/getters';
+  // import { getTopicLists } from '../vuex/getters';
   export default {
-    vuex: {
-      getters: {
-        topicTabs: getTopicTabs,
-        topicLists: getTopicLists,
-        currentTab: getCurrentTab,
-      },
-    },
+    // vuex: {
+    //   getters: {
+    //     topicLists: getTopicLists,
+    //   },
+    // },
+    props: ['items'],
   };
 </script>
 
@@ -164,7 +159,9 @@
     }
   }
 
-
+  .hello + a {
+    padding-left: 20px;
+  }
 
 
 </style>

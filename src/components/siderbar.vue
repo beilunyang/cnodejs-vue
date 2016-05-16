@@ -6,8 +6,8 @@
       </div>
       <div class="inner padding">
         <div class="user-info">
-          <a href="#"><img :src="user.avatar" alt="avatar"></a>
-          <a href="#" class="user-name">{{ user.loginName }}</a>
+          <a v-link="{ name: 'user', params: {name: user.loginname} }"><img :src="user.avatar_url" alt="avatar"></a>
+          <a v-link="{ name: 'user', params: {name: user.loginname} }" class="user-name">{{ user.loginname }}</a>
           <div class="user-score">积分：{{ user.score }}</div>
           <!-- <div class="user-signature">"人生苦短, 及时行乐"</div> -->
         </div>

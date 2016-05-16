@@ -19,7 +19,7 @@ export default (router) => router.map({
     component: require('./views/login'),
   },
 
-  '/user': {
+  '/user/:name': {
     name: 'user',
     component: require('./views/user'),
   },
