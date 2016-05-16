@@ -1,7 +1,7 @@
 <template>
   <div class="panel">
     <div class="panel-header">
-      <a v-link="{name: 'tab', params: {tab: tab.ename}}" v-for="tab in topicTabs" :class="tab.ename === currentTab ? 'active' : ''">{{ tab.name }}</a>
+      <a v-link="{name: 'tab', params: {tab: tab.ename}}"  v-for="tab in topicTabs" :class="tab.ename === currentTab ? 'active' : ''">{{ tab.name }}</a>
     </div>
 
     <div class="inner">
