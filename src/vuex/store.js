@@ -29,6 +29,8 @@ const state = {
   token: '',
   tokenAvail: false,
   user: '',
+  collection: new Set(),
+  inCollection: false,
 };
 
 const mutations = {
@@ -57,9 +59,24 @@ const mutations = {
   },
   CHECK_TOKEN_FAILURE(state) {
     state.tokenAvail = false;
+    state.token = '';
   },
   FETCH_USER_SUCCESS(state, info) {
     state.user = info;
+  },
+  ADD_COLLECTION_SUCCESS(state, id) {
+    state.collection.add(id);
+  },
+  DE_COLLECTION_SUCCESS(state, id) {
+    state.collection.delete(id);
+  },
+  CHANGE_COLLECT_STATUS(state, status) {
+    state.inCollection = status;
+  },
+  FETCH_COLLECTION_SUCCESS(state, topicLists) {
+    topicLists.forEach((value) => {
+      state.collection.add(value.id);
+    });
   },
 };
 

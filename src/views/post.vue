@@ -10,7 +10,8 @@
 <script>
   import cSiderbar from '../components/siderbar';
   import cArticle from '../components/article';
-  import { fetchTopic } from '../vuex/actions';
+  import { fetchTopic, changeCollectStatus } from '../vuex/actions';
+  import { getToken, getCollection } from '../vuex/getters';
   export default {
     components: {
       cSiderbar,
@@ -19,11 +20,21 @@
     vuex: {
       actions: {
         fetchTopic,
+        changeCollectStatus,
+      },
+      getters: {
+        token: getToken,
+        collection: getCollection,
       },
     },
     route: {
       data({ to: { params: { id } } }) {
         this.fetchTopic(id);
+        if (this.collection.has(id)) {
+          this.changeCollectStatus(true);
+        } else {
+          this.changeCollectStatus(false);
+        }
       },
     },
   };

@@ -13,13 +13,14 @@
 </template>
 
 <script>
-  import { changeToken, checkToken, fetchUser } from '../vuex/actions';
+  import { changeToken, checkToken, fetchUser, fetchCollection } from '../vuex/actions';
   export default {
     vuex: {
       actions: {
         changeToken,
         checkToken,
         fetchUser,
+        fetchCollection,
       },
     },
     created() {
@@ -27,7 +28,8 @@
         const t = document.cookie.split('=')[1];
         this.changeToken(t);
         this.checkToken(t)
-            .then(this.fetchUser);
+            .then(this.fetchUser)
+            .then(this.fetchCollection);
       }
     },
   };

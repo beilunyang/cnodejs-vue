@@ -11,6 +11,8 @@
         <span>作者{{ topic.author.loginname }}</span>
         <span>{{ topic.visit_count }}次浏览</span>
         <span>来自 {{ topic.tab | transTab }}</span>
+        <a href="#" class="btn btn-success" v-if="!inCollection" @click.prevent.stop="collect">收藏</a>
+        <a href="#" class="btn btn-failure" v-else>取消收藏</a>
       </div>
     </div>
     <div class="inner padding">
@@ -23,11 +25,27 @@
 </template>
 
 <script>
-  import { getTopic } from '../vuex/getters';
+  import { getTopic, getCollectStatus, getToken } from '../vuex/getters';
+  import { addCollection, changeCollectStatus } from '../vuex/actions';
   export default {
     vuex: {
       getters: {
         topic: getTopic,
+        inCollection: getCollectStatus,
+        token: getToken,
+      },
+      actions: {
+        addCollection,
+        changeCollectStatus,
+      },
+    },
+    methods: {
+      collect() {
+        this.addCollection(this.topic.id, this.token)
+            .then(this.changeCollectStatus(true));
+      },
+      deCollect() {
+
       },
     },
   };
@@ -47,6 +65,21 @@
         content: '•';
       }
     }
+
+    a {
+      color: #FFF;
+
+      &:hover {
+        color: #FFF;
+      }
+
+    }
+
+  }
+
+  .btn-failure {
+    background-color: #909090;
+    color: #000;
   }
 
 </style>

@@ -11,3 +11,7 @@ export const getToken = (state) => state.token;
 export const getTokenAvail = (state) => state.tokenAvail;
 
 export const getUser = (state) => state.user;
+
+export const getCollection = (state) => state.collection;
+
+export const getCollectStatus = (state) => state.inCollection;
