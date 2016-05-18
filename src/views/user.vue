@@ -40,6 +40,7 @@
 
 <script>
   import cList from '../components/list';
+  import { fetchUser } from '../vuex/actions';
   import { getUser } from '../vuex/getters';
   export default {
     components: {
@@ -48,6 +49,14 @@
     vuex: {
       getters: {
         user: getUser,
+      },
+      actions: {
+        fetchUser,
+      },
+    },
+    route: {
+      data({ to: { params: { name } } }) {
+        this.fetchUser(name);
       },
     },
   };

@@ -16,7 +16,7 @@
 
     <div class="panel" v-if="token">
       <div class="inner padding">
-        <a href="#" class="btn btn-success">发布话题</a>
+        <a v-link="{name: 'create'}" class="btn btn-success">发布话题</a>
       </div>
     </div>
 

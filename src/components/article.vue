@@ -12,11 +12,11 @@
         <span>{{ topic.visit_count }}次浏览</span>
         <span>来自 {{ topic.tab | transTab }}</span>
         <a href="#" class="btn btn-success" v-if="!inCollection" @click.prevent.stop="collect">收藏</a>
-        <a href="#" class="btn btn-failure" v-else>取消收藏</a>
+        <a href="#" class="btn btn-failure" v-else @click.prevent.stop="deCollect">取消收藏</a>
       </div>
     </div>
     <div class="inner padding">
-      <div class="article-content">
+      <div class="markdown-body">
         {{{ topic.content }}}
       </div>
     </div>
@@ -25,8 +25,11 @@
 </template>
 
 <script>
+  // github markdown 样式
+  require('github-markdown-css/github-markdown.css');
+
   import { getTopic, getCollectStatus, getToken } from '../vuex/getters';
-  import { addCollection, changeCollectStatus } from '../vuex/actions';
+  import { addCollection, changeCollectStatus, deCollection } from '../vuex/actions';
   export default {
     vuex: {
       getters: {
@@ -37,15 +40,17 @@
       actions: {
         addCollection,
         changeCollectStatus,
+        deCollection,
       },
     },
     methods: {
       collect() {
         this.addCollection(this.topic.id, this.token)
-            .then(this.changeCollectStatus(true));
+          .then(this.changeCollectStatus(true));
       },
       deCollect() {
-
+        this.deCollection(this.topic.id, this.token)
+          .then(this.changeCollectStatus(false));
       },
     },
   };
@@ -80,6 +85,15 @@
   .btn-failure {
     background-color: #909090;
     color: #000;
+  }
+
+  .markdown-body {
+    padding: 0 15px;
+    img {
+      max-width: 100%;
+      width: auto;
+      height: auto;
+    }
   }
 
 </style>

@@ -1,6 +1,7 @@
 <template>
   <div class="content">
     <c-article></c-article>
+    <c-comment></c-comment>
   </div>
   <div class="sider">
     <c-siderbar></c-siderbar>
@@ -10,12 +11,14 @@
 <script>
   import cSiderbar from '../components/siderbar';
   import cArticle from '../components/article';
+  import cComment from '../components/comment';
   import { fetchTopic, changeCollectStatus } from '../vuex/actions';
   import { getToken, getCollection } from '../vuex/getters';
   export default {
     components: {
       cSiderbar,
       cArticle,
+      cComment,
     },
     vuex: {
       actions: {
@@ -40,6 +43,3 @@
   };
 </script>
 
-<style lang="scss">
-
-</style>

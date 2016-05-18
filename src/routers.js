@@ -24,5 +24,10 @@ export default (router) => router.map({
     component: require('./views/user'),
   },
 
+  '/create': {
+    name: 'create',
+    component: require('./views/create'),
+  },
+
 });
 
