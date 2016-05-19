@@ -24,6 +24,7 @@ const state = {
     ename: 'job',
   }],
   currentTab: '',
+  currentPage: '',
   topicLists: [],
   topic: '',
   token: '',
@@ -31,16 +32,20 @@ const state = {
   user: '',
   collection: new Set(),
   inCollection: false,
+  msgCount: 0,
+  messages: {},
 };
 
 const mutations = {
-  FETCH_TOPIC_LISTS_SUCCESS(state, topicLists, topicTab) {
+  FETCH_TOPIC_LISTS_SUCCESS(state, topicLists, topicTab, page) {
     state.topicLists = topicLists;
     state.currentTab = topicTab;
+    state.currentPage = page;
   },
-  FETCH_TOPIC_LISTS_FAILURE(state, topicTab) {
+  FETCH_TOPIC_LISTS_FAILURE(state, topicTab, page) {
     state.topicLists = [];
     state.currentTab = topicTab;
+    state.currentPage = page;
   },
   FETCH_TOPIC_SUCCESS(state, topic) {
     state.topic = topic;
@@ -77,6 +82,15 @@ const mutations = {
     topicLists.forEach((value) => {
       state.collection.add(value.id);
     });
+  },
+  FETCH_MSG_COUNT_SUCCESS(state, count) {
+    state.msgCount = count;
+  },
+  FETCH_MESSAGES_SUCCESS(state, msg) {
+    state.messages = msg;
+  },
+  DEL_TOKEN(state) {
+    state.token = '';
   },
 };
 

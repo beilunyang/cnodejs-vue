@@ -2,7 +2,7 @@
   <div class="content">
     <div class="panel">
       <div class="panel-header">
-        <a v-link="{name: 'tab', params: {tab: tab.ename}}"  v-for="tab in topicTabs" :class="tab.ename === currentTab ? 'active' : ''">{{ tab.name }}</a>
+        <a v-link="{name: 'tab', params: {tab: tab.ename, page: 1}}"  v-for="tab in topicTabs" :class="tab.ename === currentTab ? 'active' : ''">{{ tab.name }}</a>
       </div>
       <c-list :items='topicLists'></c-list>
     </div>
@@ -33,9 +33,10 @@
       },
     },
     route: {
-      data(transition) {
-        const topicTab = transition.to.params.tab || 'all';
-        this.fetchTopicLists(topicTab);
+      data({ to: { params: { tab = 'all', page = 1 } } }) {
+        const topicTab = tab;
+        const currentPage = page;
+        this.fetchTopicLists(topicTab, currentPage);
       },
     },
   };

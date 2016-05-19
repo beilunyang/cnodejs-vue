@@ -40,19 +40,19 @@ const _post = (url, params) => {
 };
 
 // 获取文章列表
-export const fetchTopicLists = ({ dispatch }, topicTab) => {
+export const fetchTopicLists = ({ dispatch }, topicTab, page) => {
   const url = '/topics';
-  const query = `tab=${topicTab}`;
+  const query = `tab=${topicTab}&page=${page}`;
   _get({ url, query }, topicTab)
     .then((json) => {
       if (json.success) {
-        return dispatch('FETCH_TOPIC_LISTS_SUCCESS', json.data, topicTab);
+        return dispatch('FETCH_TOPIC_LISTS_SUCCESS', json.data, topicTab, page);
       }
       return Promise.reject(new Error('fetchTopicLists failure'));
     })
     .catch((error) => {
       console.log(error);
-      dispatch('FETCH_TOPIC_LISTS_FAILURE', topicTab);
+      dispatch('FETCH_TOPIC_LISTS_FAILURE', topicTab, page);
     });
 };
 
@@ -169,3 +169,34 @@ export const replyTopic = ({ dispatch }, topic_id, accesstoken, content) => {
     })
     .catch((error) => console.log(error));
 };
+
+// 获取未读消息数
+export const fetchMsgCount = ({ dispatch }, accesstoken) => {
+  const url = '/message/count';
+  const query = `accesstoken=${accesstoken}`;
+  _get({ url, query })
+    .then((json) => {
+      if (json.success) {
+        return dispatch('FETCH_MSG_COUNT_SUCCESS', json.data);
+      }
+      return Promise.reject(new Error('fetchMsgCount failure'));
+    })
+    .catch((error) => console.log(error));
+};
+
+// 获取未读和已读消息
+export const fetchMessages = ({ dispatch }, accesstoken) => {
+  const url = '/messages';
+  const query = `accesstoken=${accesstoken}`;
+  _get({ url, query })
+    .then((json) => {
+      if (json.success) {
+        return dispatch('FETCH_MESSAGES_SUCCESS', json.data);
+      }
+      return Promise.reject(new Error('fetchMessages failure'));
+    })
+    .catch((error) => console.log(error));
+};
+
+// 删除token
+export const delToken = ({ dispatch }) => dispatch('DEL_TOKEN');

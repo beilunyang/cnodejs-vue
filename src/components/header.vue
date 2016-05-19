@@ -6,14 +6,25 @@
 		<input type="search" class="search">
 		<ul class="navbar">
 			<li><a href="/">首页</a></li>
-			<li><a href="#">关于</a></li>
-			<li><a v-link="{name: 'login'}">登入</a></li>
+			<li v-if="!token"><a v-link="{name: 'login'}">登入</a></li>
+      <template v-else>
+        <li><a v-link="{name: 'messages'}">未读消息<span class="hint" v-if="msgCount">{{ msgCount }}</span></a></li>
+        <li><a href="#" @click.prevent.stop="delToken">退出</a></li>
+      </template>
 		</ul>
 	</header>
 </template>
 
 <script>
-  import { changeToken, checkToken, fetchUser, fetchCollection } from '../vuex/actions';
+  import {
+    changeToken,
+    checkToken,
+    fetchUser,
+    fetchCollection,
+    fetchMsgCount,
+    delToken,
+  } from '../vuex/actions';
+  import { getMsgCount, getToken } from '../vuex/getters';
   export default {
     vuex: {
       actions: {
@@ -21,6 +32,12 @@
         checkToken,
         fetchUser,
         fetchCollection,
+        fetchMsgCount,
+        delToken,
+      },
+      getters: {
+        token: getToken,
+        msgCount: getMsgCount,
       },
     },
     created() {
@@ -29,7 +46,8 @@
         this.changeToken(t);
         this.checkToken(t)
             .then(this.fetchUser)
-            .then(this.fetchCollection);
+            .then(this.fetchCollection)
+            .then(() => this.fetchMsgCount(this.token));
       }
     },
   };
@@ -85,7 +103,18 @@
       display: block;
       padding: 16px;
     }
+  }
 
+  .hint {
+    background-color: #80BD01;
+    height: 14px;
+    min-width: 14px;
+    padding: 0 2px;
+    display: inline-block;
+    font-size: 10px;
+    line-height: 14px;
+    text-align: center;
+    border-radius: 10px;
   }
 
 </style>

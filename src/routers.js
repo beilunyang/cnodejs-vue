@@ -4,7 +4,7 @@ export default (router) => router.map({
     component: require('./views/page'),
   },
 
-  '/tab/:tab': {
+  '/tab/:tab/page/:page': {
     name: 'tab',
     component: require('./views/page'),
   },
@@ -27,6 +27,11 @@ export default (router) => router.map({
   '/create': {
     name: 'create',
     component: require('./views/create'),
+  },
+
+  '/messages': {
+    name: 'messages',
+    component: require('./views/message'),
   },
 
 });
