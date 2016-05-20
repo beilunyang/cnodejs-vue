@@ -6,7 +6,7 @@ export const getTopic = (state) => state.topic;
 
 export const getCurrentTab = (state) => state.currentTab;
 
-export const getCurrentPage = (state) => state.currentPage;
+export const getCurrentPage = (state) => Number(state.currentPage);
 
 export const getToken = (state) => state.token;
 
@@ -22,3 +22,4 @@ export const getMsgCount = (state) => state.msgCount;
 
 export const getMessages = (state) => state.messages;
 
+export const getPostTopic = (state) => state.postTopic;

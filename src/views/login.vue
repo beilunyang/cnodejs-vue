@@ -17,13 +17,14 @@
     </div>
   </div>
   <div class="sider">
-
+    <c-siderbar></c-siderbar>
   </div>
 </template>
 
 <script>
   import { getToken, getTokenAvail } from '../vuex/getters';
   import { changeTokenAvail, changeToken, checkToken, fetchUser } from '../vuex/actions';
+  import cSiderbar from '../components/siderbar';
   export default {
     vuex: {
       getters: {
@@ -36,6 +37,9 @@
         checkToken,
         fetchUser,
       },
+    },
+    components: {
+      cSiderbar,
     },
     methods: {
       login() {

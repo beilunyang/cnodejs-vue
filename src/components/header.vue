@@ -9,7 +9,7 @@
 			<li v-if="!token"><a v-link="{name: 'login'}">登入</a></li>
       <template v-else>
         <li><a v-link="{name: 'messages'}">未读消息<span class="hint" v-if="msgCount">{{ msgCount }}</span></a></li>
-        <li><a href="#" @click.prevent.stop="delToken">退出</a></li>
+        <li><a href="#" @click.prevent.stop="delAllToken">退出</a></li>
       </template>
 		</ul>
 	</header>
@@ -42,13 +42,36 @@
     },
     created() {
       if (document.cookie.length > 0) {
-        const t = document.cookie.split('=')[1];
+        const arr = document.cookie.split(';');
+        let tCookie;
+        for (let v of arr) {
+          v = v.trim();
+          if (v.startsWith('token=')) {
+            tCookie = v;
+            break;
+          }
+        }
+        if (!tCookie) {
+          return;
+        }
+        const t = tCookie.split('=')[1];
         this.changeToken(t);
         this.checkToken(t)
             .then(this.fetchUser)
             .then(this.fetchCollection)
             .then(() => this.fetchMsgCount(this.token));
       }
+    },
+    methods: {
+      delAllToken() {
+        if (document.cookie.length > 0) {
+          const d = new Date();
+          d.setTime(d.getTime() - 10);
+          const expires = d.toGMTString();
+          document.cookie = `token=111;expires=${expires}`;
+        }
+        this.delToken();
+      },
     },
   };
 </script>

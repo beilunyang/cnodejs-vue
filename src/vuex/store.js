@@ -33,7 +33,8 @@ const state = {
   collection: new Set(),
   inCollection: false,
   msgCount: 0,
-  messages: {},
+  postTopic: {},
+  messages: [],
 };
 
 const mutations = {

@@ -49,6 +49,7 @@
     "karma-spec-reporter": "0.0.24",
     "karma-webpack": "^1.7.0",
     "lolex": "^1.4.0",
+    "markdown-it": "^6.0.2",
     "mocha": "^2.4.5",
     "node-sass": "^3.7.0",
     "ora": "^0.2.0",

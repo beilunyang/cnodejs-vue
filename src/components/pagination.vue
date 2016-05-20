@@ -1,7 +1,7 @@
 <template>
   <nav class="pagination">
-    <a href="#" class="pre" @click.prevent.stop="pre" v-if="currentPage !== '1'">上一页</a>
-    <a href="#" class="next" @click.prevent.stop="next">下一页</a>
+    <a v-link="{name: 'tab', params: {tab: currentTab, page: currentPage - 1}}" class="pre"  v-if="currentPage !== 1">上一页</a>
+    <a v-link="{name: 'tab', params: {tab: currentTab, page: currentPage + 1}}" class="next">下一页</a>
   </nav>
 </template>
 
@@ -12,29 +12,6 @@
       getters: {
         currentPage: getCurrentPage,
         currentTab: getCurrentTab,
-      },
-    },
-    methods: {
-      pre() {
-        const _page = Number(this.currentPage);
-        if (_page !== 1) {
-          window.router.go({
-            name: 'tab',
-            params: {
-              tab: this.currentTab,
-              page: _page - 1,
-            },
-          });
-        }
-      },
-      next() {
-        window.router.go({
-          name: 'tab',
-          params: {
-            tab: this.currentTab,
-            page: Number(this.currentPage) + 1,
-          },
-        });
       },
     },
   };

@@ -25,9 +25,6 @@
 </template>
 
 <script>
-  // github markdown 样式
-  require('github-markdown-css/github-markdown.css');
-
   import { getTopic, getCollectStatus, getToken } from '../vuex/getters';
   import { addCollection, changeCollectStatus, deCollection } from '../vuex/actions';
   export default {
@@ -57,6 +54,7 @@
 </script>
 
 <style lang="scss">
+  @import '../assets/lib/github-markdown';
   .article-header {
     background-color: #FFF;
     border-bottom: 1px solid #E5E5E5;

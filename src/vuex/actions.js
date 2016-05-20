@@ -107,10 +107,7 @@ export const fetchUser = ({ dispatch }, loginName) => {
     }
     return Promise.reject(new Error('fetchUser failure'));
   })
-  .catch((error) => {
-    console.log(error);
-    dispatch('FETCH_USER_FAILURE');
-  });
+  .catch((error) => console.log(error));
 };
 
 // 加入收藏
@@ -200,3 +197,37 @@ export const fetchMessages = ({ dispatch }, accesstoken) => {
 
 // 删除token
 export const delToken = ({ dispatch }) => dispatch('DEL_TOKEN');
+
+// 发布文章
+export const pubTopic = ({ dispatch }, title, content, tab, accesstoken) => {
+  const url = '/topics';
+  const params = {
+    title,
+    content,
+    tab,
+    accesstoken,
+  };
+  _post(url, params)
+    .then((json) => {
+      if (json.success) {
+        return window.router.go({ name: 'post', params: { id: json.topic_id } });
+      }
+      return Promise.reject(new Error('pubTopic failure'));
+    })
+    .catch((error) => console.log(error));
+};
+
+// 点赞
+export const star = ({ dispatch }, reply_id, accesstoken) => {
+  const url = `/reply/${reply_id}/ups`;
+  const params = { accesstoken };
+  return _post(url, params)
+    .then((json) => {
+      if (json.success) {
+        console.log('star/unstar success');
+        return json.action;
+      }
+      return Promise.reject(new Error('star failure'));
+    })
+    .catch((error) => console.log(error));
+};
