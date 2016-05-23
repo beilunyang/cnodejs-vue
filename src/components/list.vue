@@ -11,23 +11,23 @@
         </span>
         <a href="#" class="last-time">
           <!-- <img src="https://avatars.githubusercontent.com/u/3118295?v=3&s=120" alt="avator"> -->
-          <span>最近回复：{{ topicItem.last_reply_at | timeToNow }}</span>
+          <span>{{ topicItem.last_reply_at | timeToNow }}</span>
         </a>
         <div class="topic-wrapper">
+          <span class="hello" v-if="!topicItem.author_id"></span>
           <a v-link="{name: 'post', params: {id: topicItem.id}}" title=" {{ topicItem.title }}">
             <template v-if="topicItem.author_id">
               <span class="top" v-if="topicItem.top">置顶</span>
               <span class="top" v-else v-if="topicItem.good">精华</span>
               <span class="top normal" v-if="!topicItem.top && !topicItem.good && topicItem.tab">{{ topicItem.tab | transTab }}</span>
             </template>
-            <span class="hello" v-else></span>
             {{ topicItem.title }}
           </a>
         </div>
       </div>
 
     </div>
-    <c-pagination></c-pagination>
+    <c-pagination v-if="items[0].author_id"></c-pagination>
   </div>
 </template>
 

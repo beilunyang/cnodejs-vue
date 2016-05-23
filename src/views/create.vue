@@ -26,7 +26,7 @@
 </template>
 
 <script>
-  const MarkdownIt = require('markdown-it');
+  // const MarkdownIt = require('markdown-it');
   import { pubTopic } from '../vuex/actions';
   import { getPostTopic, getToken } from '../vuex/getters';
   import cSiderbar from '../components/siderbar';
@@ -56,9 +56,9 @@
     },
     methods: {
       post() {
-        const m = this.editor.codemirror.getValue();
-        const md = new MarkdownIt();
-        const content = md.render(m);
+        const content = this.editor.codemirror.getValue();
+        // const md = new MarkdownIt();
+        // const content = md.render(m);
         this.pubTopic(this.postTopic.title, content, this.postTopic.tab, this.token);
       },
     },

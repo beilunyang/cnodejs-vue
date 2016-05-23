@@ -154,18 +154,19 @@ export const fetchCollection = ({ dispatch }, loginName) => {
 // 改变收藏状态
 export const changeCollectStatus = ({ dispatch }, status) => dispatch('CHANGE_COLLECT_STATUS', status);
 
-export const replyTopic = ({ dispatch }, topic_id, accesstoken, content) => {
-  const url = `/topic/${topic_id}/replies`;
-  const params = { accesstoken, topic_id, content };
-  return _post(url, params)
-    .then((json) => {
-      if (json.success) {
-        return console.log('reply success');
-      }
-      return Promise.reject(new Error('repy failure'));
-    })
-    .catch((error) => console.log(error));
-};
+// 回复文章
+// export const replyTopic = ({ dispatch }, topic_id, accesstoken, content) => {
+//   const url = `/topic/${topic_id}/replies`;
+//   const params = { accesstoken, topic_id, content };
+//   return _post(url, params)
+//     .then((json) => {
+//       if (json.success) {
+//         return console.log('reply success');
+//       }
+//       return Promise.reject(new Error('repy failure'));
+//     })
+//     .catch((error) => console.log(error));
+// };
 
 // 获取未读消息数
 export const fetchMsgCount = ({ dispatch }, accesstoken) => {
@@ -195,6 +196,20 @@ export const fetchMessages = ({ dispatch }, accesstoken) => {
     .catch((error) => console.log(error));
 };
 
+// 标记全部已读
+// export const markAll = ({ dispatch }, accesstoken) => {
+//   const url = '/message/mark_all';
+//   const params = { accesstoken };
+//   _post(url, params)
+//     .then((json) => {
+//       if (json.success) {
+//         return console.log('mark all success');
+//       }
+//       return Promise.reject(new Error('mark all failure'));
+//     })
+//     .catch((error) => console.log(error));
+// };
+
 // 删除token
 export const delToken = ({ dispatch }) => dispatch('DEL_TOKEN');
 
@@ -217,7 +232,7 @@ export const pubTopic = ({ dispatch }, title, content, tab, accesstoken) => {
     .catch((error) => console.log(error));
 };
 
-// 点赞
+// 点赞或取消点赞
 export const star = ({ dispatch }, reply_id, accesstoken) => {
   const url = `/reply/${reply_id}/ups`;
   const params = { accesstoken };
@@ -230,4 +245,27 @@ export const star = ({ dispatch }, reply_id, accesstoken) => {
       return Promise.reject(new Error('star failure'));
     })
     .catch((error) => console.log(error));
+};
+
+// 发表评论
+export const reply = ({ dispatch }, { topic_id, content, accesstoken, reply_id, replyData }) => {
+  const url = `/topic/${topic_id}/replies`;
+  let params;
+  if (reply_id) {
+    params = { content, accesstoken, reply_id };
+  } else {
+    params = { content, accesstoken };
+  }
+  return _post(url, params)
+    .then((json) => {
+      if (json.success) {
+        console.log('reply success');
+        /* eslint-disable no-param-reassign */
+        replyData.reply_id = json.reply_id;
+        return replyData;
+      }
+      return Promise.reject(new Error('reply failure'));
+    })
+    .then((r) => dispatch('ADD_REPLIES', r))
+    .catch(error => console.log(error));
 };

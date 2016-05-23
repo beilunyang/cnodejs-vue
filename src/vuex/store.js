@@ -54,6 +54,9 @@ const mutations = {
   FETCH_TOPIC_FAILURE(state) {
     state.topic = '获取文章内容失败';
   },
+  ADD_REPLIES(state, reply) {
+    state.topic.replies.push(reply);
+  },
   CHANGE_TOKEN_AVAIL(state, isAvail) {
     state.tokenAvail = isAvail;
   },
