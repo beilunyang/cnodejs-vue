@@ -5,18 +5,21 @@
       <router-view></router-view>
     </div>
     <c-footer></c-footer>
+    <c-back></c-back>
   </div>
 </template>
 
 <script>
 import cHeader from './components/header';
 import cFooter from './components/footer';
+import cBack from './components/backTop';
 import store from './vuex/store';
 
 export default {
   components: {
     cHeader,
     cFooter,
+    cBack,
   },
   store,
 };

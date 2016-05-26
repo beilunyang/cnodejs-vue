@@ -1,44 +1,47 @@
 <template>
   <div class="content">
-    <div class="panel">
-      <div class="panel-header">
-        <a href="/" class="home">主页</a>
-        <span class="c">/ </span>
-        <span class="c"> 新消息</span>
+    <c-hint v-if="hint.show"></c-hint>
+    <template v-else>
+      <div class="panel">
+        <div class="panel-header">
+          <a href="/" class="home">主页</a>
+          <span class="c">/ </span>
+          <span class="c"> 新消息</span>
+        </div>
+        <div class="inner">
+          <div class="item" v-if="messages.hasnot_read_messages.length === 0">无消息</div>
+          <template v-if="messages.hasnot_read_messages.length > 0" v-for="item in messages.hasnot_read_messages">
+            <div class="item" v-if="item.type === 'at'">
+              <a v-link="{name: 'user', params: {name: item.author.loginname}}">{{ item.author.loginname }}</a>在话题
+              <a v-link="{name: 'post', params: {id: item.topic.id}}">{{ item.topic.title }}</a>中@了你
+            </div>
+            <div class="item" v-if="item.type === 'reply'">
+              <a v-link="{name: 'user', params: {name: item.author.loginname}}">{{ item.author.loginname }}</a>回复了你的话题
+              <a v-link="{name: 'post', params: {id: item.topic.id}}">{{ item.topic.title }}</a>
+            </div>
+          </template>
+        </div>
       </div>
-      <div class="inner">
-        <div class="item" v-if="messages.hasnot_read_messages.length === 0">无消息</div>
-        <template v-if="messages.hasnot_read_messages.length > 0" v-for="item in messages.hasnot_read_messages">
-          <div class="item" v-if="item.type === 'at'">
-            <a v-link="{name: 'user', params: {name: item.author.loginname}}">{{ item.author.loginname }}</a>在话题
-            <a v-link="{name: 'post', params: {id: item.topic.id}}">{{ item.topic.title }}</a>中@了你
-          </div>
-          <div class="item" v-if="item.type === 'reply'">
-            <a href="#">{{ item.author.loginname }}</a>回复了你的话题
-            <a href="#">{{ item.topic.title }}</a>
-          </div>
-        </template>
-      </div>
-    </div>
 
-    <div class="panel">
-      <div class="panel-header">
-        过往信息
+      <div class="panel">
+        <div class="panel-header">
+          过往信息
+        </div>
+        <div class="inner">
+          <div class="item" v-if="messages.has_read_messages.length === 0">无消息</div>
+          <template v-if="messages.has_read_messages.length > 0" v-for="item in messages.has_read_messages">
+            <div class="item" v-if="item.type === 'at'">
+              <a v-link="{name: 'user', params: {name: item.author.loginname}}">{{ item.author.loginname }}</a>在话题
+              <a v-link="{name: 'post', params: {id: item.topic.id}}">{{ item.topic.title }}</a>中@了你
+            </div>
+            <div class="item" v-if="item.type === 'reply'">
+              <a v-link="{name: 'user', params: {name: item.author.loginname}}">{{ item.author.loginname }}</a>回复了你的话题
+              <a v-link="{name: 'post', params: {id: item.topic.id}}">{{ item.topic.title }}</a>
+            </div>
+          </template>
+        </div>
       </div>
-      <div class="inner">
-        <div class="item" v-if="messages.has_read_messages.length === 0">无消息</div>
-        <template v-if="messages.has_read_messages.length > 0" v-for="item in messages.has_read_messages">
-          <div class="item" v-if="item.type === 'at'">
-            <a v-link="{name: 'user', params: {name: item.author.loginname}}">{{ item.author.loginname }}</a>在话题
-            <a v-link="{name: 'post', params: {id: item.topic.id}}">{{ item.topic.title }}</a>中@了你
-          </div>
-          <div class="item" v-if="item.type === 'reply'">
-            <a href="#">{{ item.author.loginname }}</a>回复了你的话题
-            <a href="#">{{ item.topic.title }}</a>
-          </div>
-        </template>
-      </div>
-    </div>
+    </template>
   </div>
 
   <div class="sider">
@@ -47,24 +50,54 @@
 </template>
 
 <script>
+  /* eslint-disable max-len */
+  import cHint from '../components/hint';
   import cSiderbar from '../components/siderbar';
-  import { getMessages, getToken } from '../vuex/getters';
-  import { fetchMessages } from '../vuex/actions';
+  import { getMessages, getToken, getHint } from '../vuex/getters';
+  import { fetchMessages, fetchUser, checkToken, changeUser, initHint, showHint } from '../vuex/actions';
   export default {
     vuex: {
       getters: {
         messages: getMessages,
         token: getToken,
+        hint: getHint,
       },
       actions: {
         fetchMessages,
+        checkToken,
+        fetchUser,
+        changeUser,
+        initHint,
+        showHint,
       },
     },
     components: {
       cSiderbar,
+      cHint,
+    },
+    ready() {
+      if (document.cookie.length > 0) {
+        const arr = document.cookie.split(';');
+        const user = {};
+        for (let v of arr) {
+          v = v.trim();
+          if (v.startsWith('loginname=')) {
+            user.loginname = v.split('=')[1];
+          } else if (v.startsWith('avatar_url')) {
+            user.avatar_url = v.split('=')[1];
+          } else if (v.startsWith('score')) {
+            user.score = v.split('=')[1];
+          }
+        }
+        if (user.loginname) {
+          this.changeUser(user);
+        }
+      }
     },
     route: {
       data() {
+        this.initHint();
+        this.showHint();
         this.fetchMessages(this.token);
       },
     },
@@ -73,8 +106,9 @@
 
 <style lang="scss">
   .item {
+    line-height: 1.6;
     font-size: 14px;
-    padding: 15px 0 15px 10px;
+    padding: 15px 10px;
     border-top: 1px solid #F0F0F0;
     a {
       color: #08C;

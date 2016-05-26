@@ -1,23 +1,25 @@
 <template>
   <div class="content">
-    <div class="panel-header">
-      <a href="/" class="home">主页</a>
-      <span class="c">/ </span>
-      <span class="c"> 发布话题</span>
-
-    </div>
-    <div class="inner padding">
-      <fieldset>
-        <span>选择版块</span>
-        <select v-model="postTopic.tab" class="create-tab">
-          <option value="share" selected>分享</option>
-          <option value="ask">问答</option>
-          <option value="job">招聘</option>
-        </select>
-        <input type="text" placeholder="标题字数10字以上" required class="create-title" v-model="postTopic.title">
-        <textarea></textarea>
-        <a href="#" class="btn btn-success" @click.prevent.stop="post">提交</a>
-      </fieldset>
+    <div class="panel">
+      <div class="panel-header">
+        <a href="/" class="home">主页</a>
+        <span class="c">/ </span>
+        <span class="c"> 发布话题</span>
+      </div>
+      <div class="inner padding">
+        <c-hint v-if="hint.show"></c-hint>
+        <fieldset>
+          <span>选择版块</span>
+          <select v-model="postTopic.tab" class="create-tab">
+            <option value="share" selected>分享</option>
+            <option value="ask">问答</option>
+            <option value="job">招聘</option>
+          </select>
+          <input type="text" placeholder="标题字数10字以上" class="create-title" v-model="postTopic.title">
+          <textarea></textarea>
+          <a href="#" class="btn btn-success" @click.prevent.stop="post">提交</a>
+        </fieldset>
+      </div>
     </div>
   </div>
   <div class="sider">
@@ -26,39 +28,60 @@
 </template>
 
 <script>
-  // const MarkdownIt = require('markdown-it');
-  import { pubTopic } from '../vuex/actions';
-  import { getPostTopic, getToken } from '../vuex/getters';
+  import { pubTopic, initHint, changeUser } from '../vuex/actions';
+  import { getToken, getHint } from '../vuex/getters';
   import cSiderbar from '../components/siderbar';
+  import cHint from '../components/hint';
   export default {
     data() {
       return {
         editor: '',
+        postTopic: {},
       };
     },
     vuex: {
       getters: {
-        postTopic: getPostTopic,
+        // postTopic: getPostTopic,
         token: getToken,
+        hint: getHint,
       },
       actions: {
         pubTopic,
+        initHint,
+        changeUser,
       },
     },
     components: {
       cSiderbar,
+      cHint,
     },
     ready() {
+      this.initHint();
       /* eslint-disable no-undef */
       /* eslint-disable no-var */
       this.editor = new Editor();
       this.editor.render();
+      if (document.cookie.length > 0) {
+        const arr = document.cookie.split(';');
+        const user = {};
+        for (let v of arr) {
+          v = v.trim();
+          if (v.startsWith('loginname=')) {
+            user.loginname = v.split('=')[1];
+          } else if (v.startsWith('avatar_url')) {
+            user.avatar_url = v.split('=')[1];
+          } else if (v.startsWith('score')) {
+            user.score = v.split('=')[1];
+          }
+        }
+        if (user.loginname) {
+          this.changeUser(user);
+        }
+      }
     },
     methods: {
       post() {
         const content = this.editor.codemirror.getValue();
-        // const md = new MarkdownIt();
-        // const content = md.render(m);
         this.pubTopic(this.postTopic.title, content, this.postTopic.tab, this.token);
       },
     },
@@ -69,10 +92,14 @@
   fieldset {
     border: none;
     font-size: 14px;
+
+    & > span {
+      margin-right: 5px;
+    }
   }
 
   select {
-    margin-left: 5px;
+    margin-top: 10px;
   }
 
   .create-title {
@@ -93,4 +120,5 @@
     border: 1px solid #CCC;
     height: 30px;
   }
+
 </style>

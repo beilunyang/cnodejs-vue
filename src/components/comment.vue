@@ -1,4 +1,4 @@
-<template>
+v-if=""<template>
   <div class="panel" v-if="topic.reply_count !== 0">
     <div class="panel-header">
       {{ topic.reply_count }}条评论
@@ -27,6 +27,7 @@
     <div class="panel-header">
       添加回复
     </div>
+    <c-hint v-if="hint.show"></c-hint>
     <div class="inner padding">
       <textarea></textarea>
       <a href="#" class="btn btn-success" @click.prevent.stop="toReply">回复</a>
@@ -36,24 +37,30 @@
 
 <script>
   const MarkdownIt = require('markdown-it');
-  import { getTopic, getToken } from '../vuex/getters';
-  import { star, reply } from '../vuex/actions';
+  import cHint from '../components/hint';
+  import { getTopic, getToken, getUser, getHint } from '../vuex/getters';
+  import { star, reply, initHint } from '../vuex/actions';
   export default {
     data() {
       return {
         editor: '',
         rid: '',
-        rauthor: {},
       };
+    },
+    components: {
+      cHint,
     },
     vuex: {
       getters: {
+        hint: getHint,
         topic: getTopic,
         token: getToken,
+        user: getUser,
       },
       actions: {
         star,
         reply,
+        initHint,
       },
     },
     methods: {
@@ -79,7 +86,7 @@
         const content = cv + postfix;
         const md = new MarkdownIt();
         const replyData = {
-          author: this.rauthor,
+          author: this.user,
           content: md.render(cv) + postfix,
           ups: [],
           reply_id: '',
@@ -92,7 +99,8 @@
           reply_id: this.rid,
           replyData,
         };
-        this.reply(params);
+        this.reply(params)
+          .then(() => this.editor.codemirror.setValue(''));
       },
       replyOne(r) {
         const cm = this.editor.codemirror;
@@ -100,12 +108,14 @@
         cm.focus();
         cm.setLine(line, `${cm.getLine(line)} @${r.author.loginname} `);
         this.rid = r.reply_id;
-        this.rauthor = r.author;
       },
     },
     ready() {
-      this.editor = new Editor();
-      this.editor.render();
+      this.initHint();
+      if (this.token) {
+        this.editor = new Editor();
+        this.editor.render();
+      }
     },
   };
 </script>

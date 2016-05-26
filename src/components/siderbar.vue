@@ -6,7 +6,7 @@
       </div>
       <div class="inner padding">
         <div class="user-info">
-          <a v-link="{ name: 'user', params: {name: user.loginname} }"><img :src="user.avatar_url" alt="avatar"></a>
+          <a v-link="{ name: 'user', params: {name: user.loginname} }" class="user-logo"><img :src="user.avatar_url" alt="avatar"></a>
           <a v-link="{ name: 'user', params: {name: user.loginname} }" class="user-name">{{ user.loginname }}</a>
           <div class="user-score">积分：{{ user.score }}</div>
           <!-- <div class="user-signature">"人生苦短, 及时行乐"</div> -->
@@ -49,17 +49,21 @@
     img {
       width: 48px;
       height: 48px;
+      margin-bottom: 10px;
     }
 
   }
 
+  .user-logo {
+    margin-right: 8px;
+  }
+
   .user-name {
-    margin-left: 8px;
     color: #778087;
   }
 
   .user-score {
-    margin: 10px 5px;
+    margin: 10px 0;
   }
 
   .user-signature {

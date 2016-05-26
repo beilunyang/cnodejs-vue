@@ -3,7 +3,6 @@
 		<a href="#" class="brand">
       <img src="https://o4j806krb.qnssl.com/public/images/cnodejs_light.svg" alt="cnodejs-logo">
     </a>
-		<input type="search" class="search">
 		<ul class="navbar">
 			<li><a href="/">首页</a></li>
 			<li v-if="!token"><a v-link="{name: 'login'}">登入</a></li>
@@ -40,7 +39,7 @@
         msgCount: getMsgCount,
       },
     },
-    created() {
+    ready() {
       if (document.cookie.length > 0) {
         const arr = document.cookie.split(';');
         let tCookie;
@@ -57,8 +56,7 @@
         const t = tCookie.split('=')[1];
         this.changeToken(t);
         this.checkToken(t)
-            .then(this.fetchUser)
-            .then(this.fetchCollection)
+            .then((loginname) => this.fetchCollection(loginname))
             .then(() => this.fetchMsgCount(this.token));
       }
     },
@@ -69,8 +67,12 @@
           d.setTime(d.getTime() - 10);
           const expires = d.toGMTString();
           document.cookie = `token=111;expires=${expires}`;
+          document.cookie = `avatar_url=111;expires=${expires}`;
+          document.cookie = `loginname=111;expires=${expires}`;
+          document.cookie = `score=111;expires=${expires}`;
         }
         this.delToken();
+        window.router.go({ name: 'index' });
       },
     },
   };
@@ -89,27 +91,6 @@
     width: 120px;
     height: 28px;
     padding: 5px 20px;
-  }
-
-  .search {
-    float: left;
-    position: relative;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border-radius: 15px;
-    background: url('https://o4j806krb.qnssl.com/public/images/search.png') 7px 4px no-repeat #888;
-    padding: 5px 5px 5px 22px;
-    border: 0;
-    transition: all .3s;
-
-    &:focus {
-      outline: none;
-    }
-
-    &:hover {
-      background-color: #FFF;
-    }
-
   }
 
   .navbar {
@@ -140,4 +121,21 @@
     border-radius: 10px;
   }
 
+  @media (max-width: 400px) {
+    .brand {
+      float: none;
+      margin: 0 auto;
+      display: block;
+    }
+
+    .navbar {
+      float: none;
+      text-align: center;
+
+      li {
+        float: none;
+        display: inline-block;
+      }
+    }
+  }
 </style>

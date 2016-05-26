@@ -3,18 +3,17 @@
     <div class="topic-list">
 
       <div class="cell" v-for="topicItem in items">
-        <a href="#" class="avatar"><img :src="topicItem.author.avatar_url" alt="avator"></a>
+        <span class="hello" v-if="!topicItem.author_id"></span>
+        <a v-link="{name: 'user', params: {name: topicItem.author.loginname}}" class="avatar"><img :src="topicItem.author.avatar_url" alt="avator"></a>
         <span class="info-count" v-if="topicItem.author_id">
           <span class="reply-count">{{ topicItem.reply_count }}</span>
           <span class="seperator">/</span>
           <span class="visited-count">{{ topicItem.visit_count }}</span>
         </span>
         <a href="#" class="last-time">
-          <!-- <img src="https://avatars.githubusercontent.com/u/3118295?v=3&s=120" alt="avator"> -->
           <span>{{ topicItem.last_reply_at | timeToNow }}</span>
         </a>
         <div class="topic-wrapper">
-          <span class="hello" v-if="!topicItem.author_id"></span>
           <a v-link="{name: 'post', params: {id: topicItem.id}}" title=" {{ topicItem.title }}">
             <template v-if="topicItem.author_id">
               <span class="top" v-if="topicItem.top">置顶</span>
@@ -53,7 +52,7 @@
     box-shadow: 0 0 5px #CCC;
   }
   .panel-header {
-    font-size: 14px;
+    font-size: .9em;
     background-color: #F6F6F6;
     padding: 10px;
     border-radius: 3px 3px 0 0;
@@ -109,7 +108,7 @@
 
   .reply-count {
     color: #9e78c0;
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .seperator {
@@ -136,7 +135,7 @@
 
   .top {
     background-color: #80BD01;
-    font-size: 13px;
+    font-size: .6em;
     padding: 3px;
     color: #FFF;
     border-radius: 3px;
@@ -149,19 +148,24 @@
 
   .topic-wrapper {
     a {
-      max-width: 70%;
       color: #333;
       line-height: 30px;
       overflow: hidden;
       vertical-align: middle;
-      display: inline-block;
+      display: block;
       white-space: nowrap;
       text-overflow: ellipsis;
     }
   }
 
   .hello + a {
-    padding-left: 20px;
+    margin-right: 20px;
+  }
+
+  @media (max-width: 512px) {
+    body {
+      font-size: 14px;
+    }
   }
 
 

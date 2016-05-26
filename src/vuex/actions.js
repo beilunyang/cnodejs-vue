@@ -43,7 +43,7 @@ const _post = (url, params) => {
 export const fetchTopicLists = ({ dispatch }, topicTab, page) => {
   const url = '/topics';
   const query = `tab=${topicTab}&page=${page}`;
-  _get({ url, query }, topicTab)
+  return _get({ url, query }, topicTab)
     .then((json) => {
       if (json.success) {
         return dispatch('FETCH_TOPIC_LISTS_SUCCESS', json.data, topicTab, page);
@@ -53,22 +53,25 @@ export const fetchTopicLists = ({ dispatch }, topicTab, page) => {
     .catch((error) => {
       console.log(error);
       dispatch('FETCH_TOPIC_LISTS_FAILURE', topicTab, page);
+      return Promise.reject();
     });
 };
 
 // 获取某一文章
 export const fetchTopic = ({ dispatch }, id) => {
   const url = `/topic/${id}`;
-  _get({ url })
+  return _get({ url })
     .then((json) => {
       if (json.success) {
-        return dispatch('FETCH_TOPIC_SUCCESS', json.data);
+        dispatch('FETCH_TOPIC_SUCCESS', json.data);
+        return json.data.author.loginname;
       }
       return Promise.reject(new Error('fetchTopic failure'));
     })
     .catch((error) => {
       console.log(error);
       dispatch('FETCH_TOPIC_FAILURE');
+      return Promise.reject();
     });
 };
 
@@ -93,6 +96,7 @@ export const checkToken = ({ dispatch }, accesstoken) => {
   .catch((error) => {
     console.log(error);
     dispatch('CHECK_TOKEN_FAILURE');
+    return Promise.reject();
   });
 };
 
@@ -103,12 +107,20 @@ export const fetchUser = ({ dispatch }, loginName) => {
   .then((json) => {
     if (json.success) {
       dispatch('FETCH_USER_SUCCESS', json.data);
-      return loginName;
+      // return loginName;
+      return json.data;
     }
     return Promise.reject(new Error('fetchUser failure'));
   })
-  .catch((error) => console.log(error));
+  .catch((error) => {
+    console.log(error);
+    dispatch('FETCH_USER_FAILURE');
+    return Promise.reject();
+  });
 };
+
+// 改变用户信息
+export const changeUser = ({ dispatch }, info) => dispatch('CHANGE_USER_SUCCESS', info);
 
 // 加入收藏
 export const addCollection = ({ dispatch }, topic_id, accesstoken) => {
@@ -121,7 +133,10 @@ export const addCollection = ({ dispatch }, topic_id, accesstoken) => {
       }
       return Promise.reject(new Error('addCollection failure'));
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      console.log(error);
+      return Promise.reject();
+    });
 };
 
 // 取消收藏
@@ -135,7 +150,10 @@ export const deCollection = ({ dispatch }, topic_id, accesstoken) => {
       }
       return Promise.reject(new Error('deCollection failure'));
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      console.log(error);
+      return Promise.reject();
+    });
 };
 
 // 获取收藏文章
@@ -148,25 +166,14 @@ export const fetchCollection = ({ dispatch }, loginName) => {
       }
       return Promise.reject(new Error('fetchCollection failure'));
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      console.log(error);
+      return Promise.reject();
+    });
 };
 
 // 改变收藏状态
 export const changeCollectStatus = ({ dispatch }, status) => dispatch('CHANGE_COLLECT_STATUS', status);
-
-// 回复文章
-// export const replyTopic = ({ dispatch }, topic_id, accesstoken, content) => {
-//   const url = `/topic/${topic_id}/replies`;
-//   const params = { accesstoken, topic_id, content };
-//   return _post(url, params)
-//     .then((json) => {
-//       if (json.success) {
-//         return console.log('reply success');
-//       }
-//       return Promise.reject(new Error('repy failure'));
-//     })
-//     .catch((error) => console.log(error));
-// };
 
 // 获取未读消息数
 export const fetchMsgCount = ({ dispatch }, accesstoken) => {
@@ -179,7 +186,10 @@ export const fetchMsgCount = ({ dispatch }, accesstoken) => {
       }
       return Promise.reject(new Error('fetchMsgCount failure'));
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      console.log(error);
+      return Promise.reject();
+    });
 };
 
 // 获取未读和已读消息
@@ -193,22 +203,12 @@ export const fetchMessages = ({ dispatch }, accesstoken) => {
       }
       return Promise.reject(new Error('fetchMessages failure'));
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      console.log(error);
+      dispatch('FETCH_MESSAGES_FAILURE');
+      return Promise.reject();
+    });
 };
-
-// 标记全部已读
-// export const markAll = ({ dispatch }, accesstoken) => {
-//   const url = '/message/mark_all';
-//   const params = { accesstoken };
-//   _post(url, params)
-//     .then((json) => {
-//       if (json.success) {
-//         return console.log('mark all success');
-//       }
-//       return Promise.reject(new Error('mark all failure'));
-//     })
-//     .catch((error) => console.log(error));
-// };
 
 // 删除token
 export const delToken = ({ dispatch }) => dispatch('DEL_TOKEN');
@@ -229,7 +229,11 @@ export const pubTopic = ({ dispatch }, title, content, tab, accesstoken) => {
       }
       return Promise.reject(new Error('pubTopic failure'));
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      console.log(error);
+      dispatch('PUB_TOPIC_FAILURE');
+      return Promise.reject();
+    });
 };
 
 // 点赞或取消点赞
@@ -244,7 +248,10 @@ export const star = ({ dispatch }, reply_id, accesstoken) => {
       }
       return Promise.reject(new Error('star failure'));
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      console.log(error);
+      return Promise.reject();
+    });
 };
 
 // 发表评论
@@ -267,5 +274,15 @@ export const reply = ({ dispatch }, { topic_id, content, accesstoken, reply_id, 
       return Promise.reject(new Error('reply failure'));
     })
     .then((r) => dispatch('ADD_REPLIES', r))
-    .catch(error => console.log(error));
+    .catch((error) => {
+      console.log(error);
+      dispatch('REPLY_FAILURE');
+      return Promise.reject();
+    });
 };
+
+// 初始化hint
+export const initHint = ({ dispatch }) => dispatch('INIT_HINT');
+
+// 显示hint
+export const showHint = ({ dispatch }) => dispatch('SHOW_HINT');

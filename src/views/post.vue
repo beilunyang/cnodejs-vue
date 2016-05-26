@@ -1,7 +1,10 @@
 <template>
   <div class="content">
-    <c-article></c-article>
-    <c-comment></c-comment>
+    <c-hint v-if="hint.show"></c-hint>
+    <template v-if="topic && !hint.show">
+      <c-article></c-article>
+      <c-comment></c-comment>
+    </template>
   </div>
   <div class="sider">
     <c-siderbar></c-siderbar>
@@ -9,30 +12,40 @@
 </template>
 
 <script>
+  import cHint from '../components/hint';
   import cSiderbar from '../components/siderbar';
   import cArticle from '../components/article';
   import cComment from '../components/comment';
-  import { fetchTopic, changeCollectStatus } from '../vuex/actions';
-  import { getToken, getCollection } from '../vuex/getters';
+  import { fetchTopic, changeCollectStatus, initHint, showHint, fetchUser } from '../vuex/actions';
+  import { getToken, getCollection, getHint, getTopic } from '../vuex/getters';
   export default {
     components: {
       cSiderbar,
       cArticle,
       cComment,
+      cHint,
     },
     vuex: {
       actions: {
         fetchTopic,
         changeCollectStatus,
+        initHint,
+        showHint,
+        fetchUser,
       },
       getters: {
+        topic: getTopic,
+        hint: getHint,
         token: getToken,
         collection: getCollection,
       },
     },
     route: {
       data({ to: { params: { id } } }) {
-        this.fetchTopic(id);
+        this.initHint();
+        this.showHint();
+        this.fetchTopic(id)
+          .then(this.fetchUser);
         if (this.collection.has(id)) {
           this.changeCollectStatus(true);
         } else {

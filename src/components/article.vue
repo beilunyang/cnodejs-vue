@@ -11,8 +11,10 @@
         <span>作者{{ topic.author.loginname }}</span>
         <span>{{ topic.visit_count }}次浏览</span>
         <span>来自 {{ topic.tab | transTab }}</span>
-        <a href="#" class="btn btn-success" v-if="!inCollection" @click.prevent.stop="collect">收藏</a>
-        <a href="#" class="btn btn-failure" v-else @click.prevent.stop="deCollect">取消收藏</a>
+        <template v-if="token">
+          <a href="#" class="btn btn-success" v-if="!inCollection" @click.prevent.stop="collect">收藏</a>
+          <a href="#" class="btn btn-failure" v-else @click.prevent.stop="deCollect">取消收藏</a>
+        </template>
       </div>
     </div>
     <div class="inner padding">
@@ -71,6 +73,7 @@
 
     a {
       color: #FFF;
+      margin: 5px 0;
 
       &:hover {
         color: #FFF;
