@@ -18,8 +18,8 @@
   import cHint from '../components/hint';
   import cList from '../components/list';
   import cSiderbar from '../components/siderbar';
-  import { fetchTopicLists, changeUser, fetchUser, checkToken, fetchMsgCount, fetchCollection, showHint, initHint } from '../vuex/actions';
-  import { getTopicTabs, getCurrentTab, getTopicLists, getHint } from '../vuex/getters';
+  import { fetchTopicLists, changeUser, fetchUser, checkToken, fetchMsgCount, fetchCollection, showHint, initHint, changeLoginUser } from '../vuex/actions';
+  import { getTopicTabs, getCurrentTab, getTopicLists, getHint, getLoginUser } from '../vuex/getters';
   export default {
     components: {
       cHint,
@@ -36,50 +36,30 @@
         fetchMsgCount,
         showHint,
         initHint,
+        changeLoginUser,
       },
       getters: {
         topicTabs: getTopicTabs,
         currentTab: getCurrentTab,
         topicLists: getTopicLists,
         hint: getHint,
+        loginUser: getLoginUser,
       },
     },
     ready() {
-      if (document.cookie.length > 0) {
-        const arr = document.cookie.split(';');
-        const user = {};
-        let t;
-        for (let v of arr) {
-          v = v.trim();
-          if (v.startsWith('loginname=')) {
-            user.loginname = v.split('=')[1];
-          } else if (v.startsWith('avatar_url')) {
-            user.avatar_url = v.split('=')[1];
-          } else if (v.startsWith('score')) {
-            user.score = v.split('=')[1];
-          } else if (v.startsWith('token=')) {
-            t = v.split('=')[1];
-          }
-        }
-        if (user.loginname) {
-          this.changeUser(user);
-        } else if (t) {
-          this.checkToken(t)
-              .then(this.fetchUser)
-              .then((info) => {
-                document.cookie = `loginname=${info.loginname}`;
-                document.cookie = `avatar_url=${info.avatar_url}`;
-                document.cookie = `score=${info.score}`;
-              });
-        }
+      if (this.loginUser) {
+        this.changeUser(this.loginUser);
       }
     },
     route: {
       data({ to: { params: { tab = 'all', page = 1 } } }) {
+        // 初始化hint
         this.initHint();
+        // 显示hint
         this.showHint();
         const topicTab = tab;
         const currentPage = page;
+        // 获取文章列表
         this.fetchTopicLists(topicTab, currentPage);
       },
     },

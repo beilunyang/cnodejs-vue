@@ -1,6 +1,6 @@
 <template>
   <div class="siderbar">
-    <div class="panel" v-if="token">
+    <div class="panel" v-if="$route.name === 'post' || $route.name === 'user' || token">
       <div class="panel-header">
         个人信息
       </div>
@@ -9,7 +9,6 @@
           <a v-link="{ name: 'user', params: {name: user.loginname} }" class="user-logo"><img :src="user.avatar_url" alt="avatar"></a>
           <a v-link="{ name: 'user', params: {name: user.loginname} }" class="user-name">{{ user.loginname }}</a>
           <div class="user-score">积分：{{ user.score }}</div>
-          <!-- <div class="user-signature">"人生苦短, 及时行乐"</div> -->
         </div>
       </div>
     </div>
@@ -20,11 +19,11 @@
       </div>
     </div>
 
-    <div class="panel" v-if="!token">
+    <div class="panel" v-if=" $route.name !== 'post' && $route.name !== 'user'  && !token">
       <div class="panel-header">CNode：Node.js专业中文社区</div>
       <div class="inner padding">
         <div class="sign-about">您可以通过accessToken登入</div>
-        <a v-link="{name: 'login'}" class="btn btn-primary">通过token登入</a>
+        <a href="#" class="btn btn-primary" @click.prevent.stop="preLogin">通过token登入</a>
       </div>
     </div>
   </div>
@@ -32,11 +31,57 @@
 
 <script>
   import { getToken, getUser } from '../vuex/getters';
+  /* eslint-disable max-len */
+  import { changeLoginUser, changeToken, checkToken, fetchMsgCount, fetchCollection, fetchUser } from '../vuex/actions';
   export default {
     vuex: {
       getters: {
         token: getToken,
         user: getUser,
+      },
+      actions: {
+        changeLoginUser,
+        changeToken,
+        checkToken,
+        fetchCollection,
+        fetchMsgCount,
+        fetchUser,
+      },
+    },
+    methods: {
+      preLogin() {
+        if (document.cookie.length > 0) {
+          const arr = document.cookie.split(';');
+          let t;
+          for (let v of arr) {
+            v = v.trim();
+            if (v.startsWith('token=')) {
+              t = v.split('=')[1];
+              break;
+            }
+          }
+          if (t) {
+            this.changeToken(t);
+            this.checkToken(t)
+                .then(this.fetchUser)
+                .then((info) => {
+                  this.changeLoginUser(info);
+                  return info.loginname;
+                })
+                .then((name) => this.fetchCollection(name))
+                .then(() => this.fetchMsgCount(this.token))
+                .then(() => {
+                  this.$route.router.go({ name: 'index' });
+                })
+                .catch(() => {
+                  this.$route.router.go({ name: 'login' });
+                });
+          } else {
+            this.$route.router.go({ name: 'login' });
+          }
+        } else {
+          this.$route.router.go({ name: 'login' });
+        }
       },
     },
   };

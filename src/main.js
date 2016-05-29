@@ -3,27 +3,32 @@ import App from './App';
 import VueRouter from 'vue-router';
 import configRouter from './routers';
 import { timeToNow, transTab } from './filters';
+import { fetchMsgCount } from './vuex/actions';
+import { getToken } from './vuex/getters';
+import store from './vuex/store';
 
-// 过滤器
 Vue.filter('timeToNow', timeToNow);
 Vue.filter('transTab', transTab);
 
-// 路由
 Vue.use(VueRouter);
 const router = new VueRouter();
 configRouter(router);
 router.beforeEach((transition) => {
-  const name = transition.to.name;
-  if (name === 'create' || name === 'messages') {
-    if (window.token) {
+  document.body.scrollTop = 0;
+  const token = getToken(store.state);
+  if (token) {
+    fetchMsgCount(store, token);
+  }
+  if (transition.to.auth) {
+    if (token) {
       transition.next();
     } else {
-      transition.redirect({ name: 'login' });
+      const redirect = encodeURIComponent(transition.to.path);
+      transition.redirect({ name: 'login', query: { redirect } });
     }
   } else {
     transition.next();
   }
 });
 router.start(Vue.extend(App), '#app');
-window.router = router;
 

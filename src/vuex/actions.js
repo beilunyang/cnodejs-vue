@@ -107,7 +107,6 @@ export const fetchUser = ({ dispatch }, loginName) => {
   .then((json) => {
     if (json.success) {
       dispatch('FETCH_USER_SUCCESS', json.data);
-      // return loginName;
       return json.data;
     }
     return Promise.reject(new Error('fetchUser failure'));
@@ -120,7 +119,7 @@ export const fetchUser = ({ dispatch }, loginName) => {
 };
 
 // 改变用户信息
-export const changeUser = ({ dispatch }, info) => dispatch('CHANGE_USER_SUCCESS', info);
+export const changeUser = ({ dispatch }, info) => dispatch('CHANGE_USER', info);
 
 // 加入收藏
 export const addCollection = ({ dispatch }, topic_id, accesstoken) => {
@@ -196,7 +195,7 @@ export const fetchMsgCount = ({ dispatch }, accesstoken) => {
 export const fetchMessages = ({ dispatch }, accesstoken) => {
   const url = '/messages';
   const query = `accesstoken=${accesstoken}`;
-  _get({ url, query })
+  return _get({ url, query })
     .then((json) => {
       if (json.success) {
         return dispatch('FETCH_MESSAGES_SUCCESS', json.data);
@@ -206,6 +205,26 @@ export const fetchMessages = ({ dispatch }, accesstoken) => {
     .catch((error) => {
       console.log(error);
       dispatch('FETCH_MESSAGES_FAILURE');
+      return Promise.reject();
+    });
+};
+
+// 标记全部已读
+export const markAllMsg = ({ dispatch }, accesstoken) => {
+  const url = '/message/mark_all';
+  const params = {
+    accesstoken,
+  };
+  return _post(url, params)
+    .then((json) => {
+      if (json.success) {
+        dispatch('MARK_ALLMSG_SUCCESS');
+        return console.log('mark_all success');
+      }
+      return Promise.reject(new Error('mark_all failure'));
+    })
+    .catch((error) => {
+      console.log(error);
       return Promise.reject();
     });
 };
@@ -222,10 +241,10 @@ export const pubTopic = ({ dispatch }, title, content, tab, accesstoken) => {
     tab,
     accesstoken,
   };
-  _post(url, params)
+  return _post(url, params)
     .then((json) => {
       if (json.success) {
-        return window.router.go({ name: 'post', params: { id: json.topic_id } });
+        return Promise.resolve(json.topic_id);
       }
       return Promise.reject(new Error('pubTopic failure'));
     })
@@ -281,8 +300,14 @@ export const reply = ({ dispatch }, { topic_id, content, accesstoken, reply_id, 
     });
 };
 
+// 改变登入用户信息
+export const changeLoginUser = ({ dispatch }, user) => dispatch('CHANGE_LOGIN_USER', user);
+
 // 初始化hint
 export const initHint = ({ dispatch }) => dispatch('INIT_HINT');
 
 // 显示hint
 export const showHint = ({ dispatch }) => dispatch('SHOW_HINT');
+
+// 自定义hint
+export const customHint = ({ dispatch }, info) => dispatch('CUSTOM_HINT', info);

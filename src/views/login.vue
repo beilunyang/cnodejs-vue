@@ -23,8 +23,9 @@
 </template>
 
 <script>
+  /* eslint-disable max-len */
   import { getToken, getHint } from '../vuex/getters';
-  import { changeTokenAvail, changeToken, checkToken, fetchUser, initHint } from '../vuex/actions';
+  import { changeTokenAvail, changeToken, checkToken, fetchUser, initHint, changeLoginUser } from '../vuex/actions';
   import cSiderbar from '../components/siderbar';
   import cHint from '../components/hint';
   export default {
@@ -44,6 +45,7 @@
         checkToken,
         fetchUser,
         initHint,
+        changeLoginUser,
       },
     },
     components: {
@@ -66,14 +68,13 @@
             this.changeToken(this.tmpToken);
             this.fetchUser(loginName)
               .then((info) => {
-                document.cookie = `loginname=${info.loginname}`;
-                document.cookie = `avatar_url=${info.avatar_url}`;
-                document.cookie = `score=${info.score}`;
+                this.changeLoginUser(info);
                 const d = new Date();
                 d.setTime(d.getTime() + 2 * 24 * 60 * 60 * 1000);
                 const expires = d.toGMTString();
                 document.cookie = `token=${this.token};expires=${expires}`;
-                window.router.go('/');
+                const redirect = decodeURIComponent(this.$route.query.redirect || '/');
+                this.$route.router.go(redirect);
               });
           });
         }

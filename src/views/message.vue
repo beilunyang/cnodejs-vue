@@ -53,14 +53,15 @@
   /* eslint-disable max-len */
   import cHint from '../components/hint';
   import cSiderbar from '../components/siderbar';
-  import { getMessages, getToken, getHint } from '../vuex/getters';
-  import { fetchMessages, fetchUser, checkToken, changeUser, initHint, showHint } from '../vuex/actions';
+  import { getMessages, getToken, getHint, getMsgCount } from '../vuex/getters';
+  import { fetchMessages, fetchUser, checkToken, changeUser, initHint, showHint, markAllMsg } from '../vuex/actions';
   export default {
     vuex: {
       getters: {
         messages: getMessages,
         token: getToken,
         hint: getHint,
+        msgCount: getMsgCount,
       },
       actions: {
         fetchMessages,
@@ -69,6 +70,7 @@
         changeUser,
         initHint,
         showHint,
+        markAllMsg,
       },
     },
     components: {
@@ -98,7 +100,12 @@
       data() {
         this.initHint();
         this.showHint();
-        this.fetchMessages(this.token);
+        this.fetchMessages(this.token)
+            .then(() => {
+              if (this.msgCount > 0) {
+                this.markAllMsg(this.token);
+              }
+            });
       },
     },
   };

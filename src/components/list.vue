@@ -166,6 +166,13 @@
     body {
       font-size: 14px;
     }
+
+    .topic-wrapper {
+      a {
+        display: inline-block;
+        width: 90%;
+      }
+    }
   }
 
 

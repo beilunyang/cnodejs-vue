@@ -38,7 +38,7 @@ v-if=""<template>
 <script>
   const MarkdownIt = require('markdown-it');
   import cHint from '../components/hint';
-  import { getTopic, getToken, getUser, getHint } from '../vuex/getters';
+  import { getTopic, getToken, getLoginUser, getHint } from '../vuex/getters';
   import { star, reply, initHint } from '../vuex/actions';
   export default {
     data() {
@@ -55,7 +55,7 @@ v-if=""<template>
         hint: getHint,
         topic: getTopic,
         token: getToken,
-        user: getUser,
+        loginUser: getLoginUser,
       },
       actions: {
         star,
@@ -80,14 +80,15 @@ v-if=""<template>
             }
           });
       },
+
       toReply() {
         const cv = this.editor.codemirror.getValue();
-        const postfix = '<br><a href="https://bitibiti.com">自豪地采用cnodejs-vue</a>';
+        const postfix = `\n\n 自豪地采用[cnodejs-vue](https://bitibiti.com)`;
         const content = cv + postfix;
         const md = new MarkdownIt();
         const replyData = {
-          author: this.user,
-          content: md.render(cv) + postfix,
+          author: this.loginUser,
+          content: md.render(content),
           ups: [],
           reply_id: '',
           create_at: new Date(),
@@ -102,6 +103,7 @@ v-if=""<template>
         this.reply(params)
           .then(() => this.editor.codemirror.setValue(''));
       },
+
       replyOne(r) {
         const cm = this.editor.codemirror;
         const line = cm.lastLine();

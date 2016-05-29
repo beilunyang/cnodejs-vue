@@ -14,6 +14,8 @@ export const getTokenAvail = (state) => state.tokenAvail;
 
 export const getUser = (state) => state.user;
 
+export const getLoginUser = (state) => state.loginUser;
+
 export const getCollection = (state) => state.collection;
 
 export const getCollectStatus = (state) => state.inCollection;
@@ -21,7 +23,5 @@ export const getCollectStatus = (state) => state.inCollection;
 export const getMsgCount = (state) => state.msgCount;
 
 export const getMessages = (state) => state.messages;
-
-// export const getPostTopic = (state) => state.postTopic;
 
 export const getHint = (state) => state.hint;

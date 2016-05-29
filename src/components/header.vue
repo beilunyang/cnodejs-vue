@@ -1,14 +1,14 @@
 <template>
 	<header>
-		<a href="#" class="brand">
+		<a v-link="{name: 'index'}" class="brand">
       <img src="https://o4j806krb.qnssl.com/public/images/cnodejs_light.svg" alt="cnodejs-logo">
     </a>
 		<ul class="navbar">
-			<li><a href="/">首页</a></li>
+			<li><a v-link="{name: 'index'}">首页</a></li>
 			<li v-if="!token"><a v-link="{name: 'login'}">登入</a></li>
       <template v-else>
-        <li><a v-link="{name: 'messages'}">未读消息<span class="hint" v-if="msgCount">{{ msgCount }}</span></a></li>
-        <li><a href="#" @click.prevent.stop="delAllToken">退出</a></li>
+        <li><a v-link="{name: 'messages'}">未读消息<span class="h"  v-if="msgCount">{{ msgCount }}</span></a></li>
+        <li><a href="#" @click.prevent.stop="exit">退出</a></li>
       </template>
 		</ul>
 	</header>
@@ -22,6 +22,7 @@
     fetchCollection,
     fetchMsgCount,
     delToken,
+    changeLoginUser,
   } from '../vuex/actions';
   import { getMsgCount, getToken } from '../vuex/getters';
   export default {
@@ -33,6 +34,7 @@
         fetchCollection,
         fetchMsgCount,
         delToken,
+        changeLoginUser,
       },
       getters: {
         token: getToken,
@@ -42,37 +44,31 @@
     ready() {
       if (document.cookie.length > 0) {
         const arr = document.cookie.split(';');
-        let tCookie;
+        let t;
         for (let v of arr) {
           v = v.trim();
           if (v.startsWith('token=')) {
-            tCookie = v;
+            t = v.split('=')[1];
             break;
           }
         }
-        if (!tCookie) {
-          return;
+        if (t) {
+          this.changeToken(t);
+          this.checkToken(t)
+              .then(this.fetchUser)
+              .then((info) => {
+                this.changeLoginUser(info);
+                return info.loginname;
+              })
+              .then((name) => this.fetchCollection(name))
+              .then(() => this.fetchMsgCount(this.token));
         }
-        const t = tCookie.split('=')[1];
-        this.changeToken(t);
-        this.checkToken(t)
-            .then((loginname) => this.fetchCollection(loginname))
-            .then(() => this.fetchMsgCount(this.token));
       }
     },
     methods: {
-      delAllToken() {
-        if (document.cookie.length > 0) {
-          const d = new Date();
-          d.setTime(d.getTime() - 10);
-          const expires = d.toGMTString();
-          document.cookie = `token=111;expires=${expires}`;
-          document.cookie = `avatar_url=111;expires=${expires}`;
-          document.cookie = `loginname=111;expires=${expires}`;
-          document.cookie = `score=111;expires=${expires}`;
-        }
+      exit() {
         this.delToken();
-        window.router.go({ name: 'index' });
+        this.$route.router.go({ name: 'index' });
       },
     },
   };
@@ -109,16 +105,19 @@
     }
   }
 
-  .hint {
+  .h {
     background-color: #80BD01;
     height: 14px;
     min-width: 14px;
     padding: 0 2px;
+    padding-top: 1px;
+    margin-left: 1px;
     display: inline-block;
     font-size: 10px;
     line-height: 14px;
     text-align: center;
     border-radius: 10px;
+    color: #FFF;
   }
 
   @media (max-width: 400px) {

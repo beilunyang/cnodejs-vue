@@ -27,12 +27,16 @@ export default (router) => router.map({
   '/create': {
     name: 'create',
     component: require('./views/create'),
+    auth: true,
   },
 
   '/messages': {
     name: 'messages',
     component: require('./views/message'),
+    auth: true,
   },
-
+  '*': {
+    component: require('./views/404'),
+  },
 });
 

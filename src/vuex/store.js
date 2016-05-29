@@ -30,10 +30,10 @@ const state = {
   token: '',
   tokenAvail: false,
   user: '',
+  loginUser: '',
   collection: new Set(),
   inCollection: false,
   msgCount: 0,
-  // postTopic: '',
   messages: [],
   hint: {
     show: false,
@@ -81,7 +81,7 @@ const mutations = {
     }
   },
   CHANGE_TOKEN(state, token) {
-    window.token = state.token = token;
+    state.token = token;
   },
   CHECK_TOKEN_SUCCESS(state) {
     state.hint.show = false;
@@ -119,8 +119,14 @@ const mutations = {
       colorRed: true,
     };
   },
-  CHANGE_USER_SUCCESS(state, info) {
+  MARK_ALLMSG_SUCCESS(state) {
+    state.msgCount = 0;
+  },
+  CHANGE_USER(state, info) {
     state.user = info;
+  },
+  CHANGE_LOGIN_USER(state, info) {
+    state.loginUser = info;
   },
   ADD_COLLECTION_SUCCESS(state, id) {
     state.collection.add(id);
@@ -151,8 +157,9 @@ const mutations = {
     };
   },
   DEL_TOKEN(state) {
-    window.token = state.token = '';
+    state.token = '';
     state.tokenAvail = false;
+    state.loginUser = '';
   },
   INIT_HINT(state) {
     state.hint.show = false;
@@ -161,6 +168,11 @@ const mutations = {
   },
   SHOW_HINT(state) {
     state.hint.show = true;
+  },
+  CUSTOM_HINT(state, { show = false, colorRed = false, info = '正在加载中...' }) {
+    state.hint.show = show;
+    state.hint.colorRed = colorRed;
+    state.hint.info = info;
   },
 };
 

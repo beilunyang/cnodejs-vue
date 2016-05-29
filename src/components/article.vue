@@ -28,7 +28,7 @@
 
 <script>
   import { getTopic, getCollectStatus, getToken } from '../vuex/getters';
-  import { addCollection, changeCollectStatus, deCollection } from '../vuex/actions';
+  import { addCollection, changeCollectStatus, deCollection, fetchCollection } from '../vuex/actions';
   export default {
     vuex: {
       getters: {
@@ -40,6 +40,7 @@
         addCollection,
         changeCollectStatus,
         deCollection,
+        fetchCollection,
       },
     },
     methods: {

@@ -15,8 +15,7 @@
           <ul class="user-profile">
             <li>{{ user.score }}积分</li>
             <li>
-              <i></i>
-              <a :href="'https://github.com/' + user.githubUsername" target="_blank">@{{ user.githubUsername }}</a>
+              <a :href="'https://github.com/' + user.githubUsername" target="_blank"><i class="fa fa-lg fa-github"></i>@{{ user.githubUsername }}</a>
             </li>
             <li>注册于{{ user.create_at | timeToNow }}</li>
           </ul>
@@ -101,6 +100,11 @@
       &:last-child {
         color: #778087;
       }
+    }
+
+    i {
+      margin-right: 2px;
+      font-size: 18px;
     }
 
   }

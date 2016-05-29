@@ -15,7 +15,7 @@
             <option value="ask">问答</option>
             <option value="job">招聘</option>
           </select>
-          <input type="text" placeholder="标题字数10字以上" class="create-title" v-model="postTopic.title">
+          <input type="text" placeholder="标题字数10字以上" class="create-title" v-model="postTopic.title" @change="simCheck" @focus="customHint">
           <textarea></textarea>
           <a href="#" class="btn btn-success" @click.prevent.stop="post">提交</a>
         </fieldset>
@@ -28,8 +28,8 @@
 </template>
 
 <script>
-  import { pubTopic, initHint, changeUser } from '../vuex/actions';
-  import { getToken, getHint } from '../vuex/getters';
+  import { pubTopic, initHint, changeUser, showHint, customHint } from '../vuex/actions';
+  import { getToken, getHint, getLoginUser } from '../vuex/getters';
   import cSiderbar from '../components/siderbar';
   import cHint from '../components/hint';
   export default {
@@ -41,14 +41,16 @@
     },
     vuex: {
       getters: {
-        // postTopic: getPostTopic,
         token: getToken,
         hint: getHint,
+        loginUser: getLoginUser,
       },
       actions: {
         pubTopic,
         initHint,
         changeUser,
+        showHint,
+        customHint,
       },
     },
     components: {
@@ -61,28 +63,22 @@
       /* eslint-disable no-var */
       this.editor = new Editor();
       this.editor.render();
-      if (document.cookie.length > 0) {
-        const arr = document.cookie.split(';');
-        const user = {};
-        for (let v of arr) {
-          v = v.trim();
-          if (v.startsWith('loginname=')) {
-            user.loginname = v.split('=')[1];
-          } else if (v.startsWith('avatar_url')) {
-            user.avatar_url = v.split('=')[1];
-          } else if (v.startsWith('score')) {
-            user.score = v.split('=')[1];
-          }
-        }
-        if (user.loginname) {
-          this.changeUser(user);
-        }
+      if (this.loginUser) {
+        this.changeUser(this.loginUser);
       }
     },
     methods: {
       post() {
         const content = this.editor.codemirror.getValue();
-        this.pubTopic(this.postTopic.title, content, this.postTopic.tab, this.token);
+        this.pubTopic(this.postTopic.title, content, this.postTopic.tab, this.token)
+            .then((id) => {
+              this.$route.router.go({ name: 'post', params: { id } });
+            });
+      },
+      simCheck() {
+        if (this.postTopic.title.length < 10) {
+          this.customHint({ show: true, colorRed: true, info: '标题字数不能少于10' });
+        }
       },
     },
   };
