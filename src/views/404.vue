@@ -1,7 +1,7 @@
 <template>
   <div class="not-found">
-    <img src="../assets/404.jpg" alt="404">
-    <p>404 not found,{{ time }}s后将自动跳转到首页</p>
+    <div>404 not found</div>
+    <p>{{ time }}s后将自动跳转到首页</p>
   </div>
 </template>
 
@@ -29,7 +29,17 @@
 
 <style lang="scss">
   .not-found {
-    background-color: #FFF;
     text-align: center;
+    margin-top: 150px;
+
+    div {
+      font-size: 4em;
+      color: #80BD01;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, .6);
+    }
+
+    p {
+      color: lighten(#000, 35%);
+    }
   }
 </style>

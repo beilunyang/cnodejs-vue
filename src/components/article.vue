@@ -44,10 +44,12 @@
       },
     },
     methods: {
+      // 收藏
       collect() {
         this.addCollection(this.topic.id, this.token)
           .then(this.changeCollectStatus(true));
       },
+      // 取消收藏
       deCollect() {
         this.deCollection(this.topic.id, this.token)
           .then(this.changeCollectStatus(false));

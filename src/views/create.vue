@@ -58,9 +58,11 @@
       cHint,
     },
     ready() {
+      // 初始化hint
       this.initHint();
       /* eslint-disable no-undef */
       /* eslint-disable no-var */
+      // 初始化编辑器
       this.editor = new Editor();
       this.editor.render();
       if (this.loginUser) {
@@ -68,6 +70,7 @@
       }
     },
     methods: {
+      // 发送文章
       post() {
         const content = this.editor.codemirror.getValue();
         this.pubTopic(this.postTopic.title, content, this.postTopic.tab, this.token)
@@ -75,6 +78,7 @@
               this.$route.router.go({ name: 'post', params: { id } });
             });
       },
+      // 简单检测文章标题长度
       simCheck() {
         if (this.postTopic.title.length < 10) {
           this.customHint({ show: true, colorRed: true, info: '标题字数不能少于10' });

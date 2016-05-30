@@ -49,6 +49,7 @@
       },
     },
     methods: {
+      // 优先从cookie中获得accesstoken并验证合法性，从而登入
       preLogin() {
         if (document.cookie.length > 0) {
           const arr = document.cookie.split(';');

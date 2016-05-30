@@ -42,10 +42,14 @@
     },
     route: {
       data({ to: { params: { id } } }) {
+        // 初始化hint
         this.initHint();
+        // 显示hint
         this.showHint();
+        // 获取文章具体内容
         this.fetchTopic(id)
           .then(this.fetchUser);
+        // 如果文章id存在于收藏列表中，将收藏状态设置为true.从而显示取消收藏按钮。。不存在则显示收藏按钮
         if (this.collection.has(id)) {
           this.changeCollectStatus(true);
         } else {

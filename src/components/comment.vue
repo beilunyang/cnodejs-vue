@@ -68,6 +68,7 @@ v-if=""<template>
       /* eslint-disable no-undef */
       /* eslint-disable no-var */
       /* eslint-disable max-len */
+      // 点赞
       toStar(r) {
         this.star(r.id, this.token)
           .then((v) => {
@@ -81,6 +82,7 @@ v-if=""<template>
           });
       },
 
+      // 回复
       toReply() {
         const cv = this.editor.codemirror.getValue();
         const postfix = `\n\n 自豪地采用[cnodejs-vue](https://bitibiti.com)`;
@@ -104,6 +106,7 @@ v-if=""<template>
           .then(() => this.editor.codemirror.setValue(''));
       },
 
+      // 回复某人
       replyOne(r) {
         const cm = this.editor.codemirror;
         const line = cm.lastLine();
@@ -113,6 +116,7 @@ v-if=""<template>
       },
     },
     ready() {
+      // 初始化hint
       this.initHint();
       if (this.token) {
         this.editor = new Editor();

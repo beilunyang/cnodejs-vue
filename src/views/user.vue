@@ -68,8 +68,11 @@
     },
     route: {
       data({ to: { params: { name } } }) {
+        // 初始化hint
         this.initHint();
+        // 显示hint
         this.showHint();
+        // 获取相关用户信息
         this.fetchUser(name);
       },
     },

@@ -77,29 +77,13 @@
       cSiderbar,
       cHint,
     },
-    ready() {
-      if (document.cookie.length > 0) {
-        const arr = document.cookie.split(';');
-        const user = {};
-        for (let v of arr) {
-          v = v.trim();
-          if (v.startsWith('loginname=')) {
-            user.loginname = v.split('=')[1];
-          } else if (v.startsWith('avatar_url')) {
-            user.avatar_url = v.split('=')[1];
-          } else if (v.startsWith('score')) {
-            user.score = v.split('=')[1];
-          }
-        }
-        if (user.loginname) {
-          this.changeUser(user);
-        }
-      }
-    },
     route: {
       data() {
+        // 初始化hint
         this.initHint();
+        // 显示hint
         this.showHint();
+        // 获取消息并标记为已读
         this.fetchMessages(this.token)
             .then(() => {
               if (this.msgCount > 0) {

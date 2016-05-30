@@ -54,11 +54,13 @@
     },
     /* eslint-disable max-len */
     methods: {
+      // 简单检测用户输入的token长度
       simCheck() {
         if (this.tmpToken.length !== 36) {
           this.changeTokenAvail(false);
         }
       },
+      // 登入
       login() {
         if (this.tmpToken.length !== 36) {
           this.changeTokenAvail(false);
@@ -82,6 +84,7 @@
     },
     route: {
       data() {
+        // 初始化hint
         this.initHint();
       },
     },

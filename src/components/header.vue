@@ -42,6 +42,7 @@
       },
     },
     ready() {
+      // 从cookie中获取accesstoken
       if (document.cookie.length > 0) {
         const arr = document.cookie.split(';');
         let t;
@@ -52,6 +53,7 @@
             break;
           }
         }
+        // 改变token的状态，检验token的正确性，从而进行一系列初始化工作
         if (t) {
           this.changeToken(t);
           this.checkToken(t)
@@ -66,6 +68,7 @@
       }
     },
     methods: {
+      // 退出
       exit() {
         this.delToken();
         this.$route.router.go({ name: 'index' });
