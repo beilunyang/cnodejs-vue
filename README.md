@@ -15,6 +15,5 @@ npm run dev
 npm run build
 
 ```
-## demo
-[http://beilunyang.github.io/cnodejs-vue/](http://beilunyang.github.io/cnodejs-vue/)
+
 
