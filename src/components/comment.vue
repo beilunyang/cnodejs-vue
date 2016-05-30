@@ -85,7 +85,7 @@ v-if=""<template>
       // 回复
       toReply() {
         const cv = this.editor.codemirror.getValue();
-        const postfix = `\n\n 自豪地采用[cnodejs-vue](https://bitibiti.com)`;
+        const postfix = `\n\n 自豪地采用[cnodejs-vue](https://github.com/beilunyang/cnodejs-vue)`;
         const content = cv + postfix;
         const md = new MarkdownIt();
         const replyData = {
