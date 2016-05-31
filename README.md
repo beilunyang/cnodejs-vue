@@ -15,5 +15,7 @@ npm run dev
 npm run build
 
 ```
+## demo
+[cnodejs-vue](http://demo.bitibiti.com/cnodejs-vue/)
 
 
