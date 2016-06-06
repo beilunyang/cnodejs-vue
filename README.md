@@ -1,6 +1,6 @@
 # cnodejs-vue
 
-> A Vue.js project
+> cnodejs vue版，使用vuejs + vue-cli + vue-router + vuex进行开发
 
 ## Build Setup
 
@@ -14,14 +14,8 @@ npm run dev
 # build for production with minification
 npm run build
 
-# run unit tests
-npm run unit
-
-# run e2e tests
-npm run e2e
-
-# run all tests
-npm test
 ```
+## demo
+[cnodejs-vue](http://demo.bitibiti.com/cnodejs-vue/)
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
