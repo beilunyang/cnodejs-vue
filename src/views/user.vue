@@ -73,7 +73,8 @@
         // 显示hint
         this.showHint();
         // 获取相关用户信息
-        this.fetchUser(name);
+        this.fetchUser(name)
+            .catch((e) => console.log(e));
       },
     },
   };

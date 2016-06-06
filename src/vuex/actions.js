@@ -67,9 +67,8 @@ export const fetchTopicLists = ({ dispatch }, topicTab, page) => {
       return Promise.reject(new Error('fetchTopicLists failure'));
     })
     .catch((error) => {
-      console.log(error);
       dispatch('FETCH_TOPIC_LISTS_FAILURE', topicTab, page);
-      return Promise.reject();
+      return Promise.reject(error);
     });
 };
 
@@ -90,9 +89,8 @@ export const fetchTopic = ({ dispatch }, id) => {
       return Promise.reject(new Error('fetchTopic failure'));
     })
     .catch((error) => {
-      console.log(error);
       dispatch('FETCH_TOPIC_FAILURE');
-      return Promise.reject();
+      return Promise.reject(error);
     });
 };
 
@@ -128,9 +126,8 @@ export const checkToken = ({ dispatch }, accesstoken) => {
     return Promise.reject(new Error('checkToken failure'));
   })
   .catch((error) => {
-    console.log(error);
     dispatch('CHECK_TOKEN_FAILURE');
-    return Promise.reject();
+    return Promise.reject(error);
   });
 };
 
@@ -151,9 +148,8 @@ export const fetchUser = ({ dispatch }, loginName) => {
     return Promise.reject(new Error('fetchUser failure'));
   })
   .catch((error) => {
-    console.log(error);
     dispatch('FETCH_USER_FAILURE');
-    return Promise.reject();
+    return Promise.reject(error);
   });
 };
 
@@ -180,10 +176,6 @@ export const addCollection = ({ dispatch }, topic_id, accesstoken) => {
         return dispatch('ADD_COLLECTION_SUCCESS', topic_id);
       }
       return Promise.reject(new Error('addCollection failure'));
-    })
-    .catch((error) => {
-      console.log(error);
-      return Promise.reject();
     });
 };
 
@@ -203,10 +195,6 @@ export const deCollection = ({ dispatch }, topic_id, accesstoken) => {
         return dispatch('DE_COLLECTION_SUCCESS', topic_id);
       }
       return Promise.reject(new Error('deCollection failure'));
-    })
-    .catch((error) => {
-      console.log(error);
-      return Promise.reject();
     });
 };
 
@@ -224,10 +212,6 @@ export const fetchCollection = ({ dispatch }, loginName) => {
         return dispatch('FETCH_COLLECTION_SUCCESS', json.data);
       }
       return Promise.reject(new Error('fetchCollection failure'));
-    })
-    .catch((error) => {
-      console.log(error);
-      return Promise.reject();
     });
 };
 
@@ -253,10 +237,6 @@ export const fetchMsgCount = ({ dispatch }, accesstoken) => {
         return dispatch('FETCH_MSG_COUNT_SUCCESS', json.data);
       }
       return Promise.reject(new Error('fetchMsgCount failure'));
-    })
-    .catch((error) => {
-      console.log(error);
-      return Promise.reject();
     });
 };
 
@@ -277,9 +257,8 @@ export const fetchMessages = ({ dispatch }, accesstoken) => {
       return Promise.reject(new Error('fetchMessages failure'));
     })
     .catch((error) => {
-      console.log(error);
       dispatch('FETCH_MESSAGES_FAILURE');
-      return Promise.reject();
+      return Promise.reject(error);
     });
 };
 
@@ -301,10 +280,6 @@ export const markAllMsg = ({ dispatch }, accesstoken) => {
         return console.log('mark_all success');
       }
       return Promise.reject(new Error('mark_all failure'));
-    })
-    .catch((error) => {
-      console.log(error);
-      return Promise.reject();
     });
 };
 
@@ -339,9 +314,8 @@ export const pubTopic = ({ dispatch }, title, content, tab, accesstoken) => {
       return Promise.reject(new Error('pubTopic failure'));
     })
     .catch((error) => {
-      console.log(error);
       dispatch('PUB_TOPIC_FAILURE');
-      return Promise.reject();
+      return Promise.reject(error);
     });
 };
 
@@ -362,10 +336,6 @@ export const star = ({ dispatch }, reply_id, accesstoken) => {
         return json.action;
       }
       return Promise.reject(new Error('star failure'));
-    })
-    .catch((error) => {
-      console.log(error);
-      return Promise.reject();
     });
 };
 
@@ -399,9 +369,8 @@ export const reply = ({ dispatch }, { topic_id, content, accesstoken, reply_id, 
     })
     .then((r) => dispatch('ADD_REPLIES', r))
     .catch((error) => {
-      console.log(error);
       dispatch('REPLY_FAILURE');
-      return Promise.reject();
+      return Promise.reject(error);
     });
 };
 

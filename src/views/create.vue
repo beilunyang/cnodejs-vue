@@ -76,7 +76,8 @@
         this.pubTopic(this.postTopic.title, content, this.postTopic.tab, this.token)
             .then((id) => {
               this.$route.router.go({ name: 'post', params: { id } });
-            });
+            })
+            .catch((e) => console.log(e));
       },
       // 简单检测文章标题长度
       simCheck() {

@@ -79,7 +79,8 @@ v-if=""<template>
               // 随便移除一个值，让 reply.ups.length - 1
               r.ups.pop();
             }
-          });
+          })
+          .catch((e) => console.log(e));
       },
 
       // 回复
@@ -103,7 +104,8 @@ v-if=""<template>
           replyData,
         };
         this.reply(params)
-          .then(() => this.editor.codemirror.setValue(''));
+          .then(() => this.editor.codemirror.setValue(''))
+          .catch((e) => console.log(e));
       },
 
       // 回复某人

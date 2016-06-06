@@ -17,7 +17,8 @@ router.beforeEach((transition) => {
   document.body.scrollTop = 0;
   const token = getToken(store.state);
   if (token) {
-    fetchMsgCount(store, token);
+    fetchMsgCount(store, token)
+      .catch((e) => console.log(e));
   }
   if (transition.to.auth) {
     if (token) {

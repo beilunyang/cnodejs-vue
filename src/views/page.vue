@@ -60,7 +60,8 @@
         const topicTab = tab;
         const currentPage = page;
         // 获取文章列表
-        this.fetchTopicLists(topicTab, currentPage);
+        this.fetchTopicLists(topicTab, currentPage)
+            .catch((e) => console.log(e));
       },
     },
   };

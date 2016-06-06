@@ -47,12 +47,14 @@
       // 收藏
       collect() {
         this.addCollection(this.topic.id, this.token)
-          .then(this.changeCollectStatus(true));
+          .then(this.changeCollectStatus(true))
+          .catch((e) => console.log(e));
       },
       // 取消收藏
       deCollect() {
         this.deCollection(this.topic.id, this.token)
-          .then(this.changeCollectStatus(false));
+          .then(this.changeCollectStatus(false))
+          .catch((e) => console.log(e));
       },
     },
   };

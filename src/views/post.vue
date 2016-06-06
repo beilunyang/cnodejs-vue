@@ -48,7 +48,8 @@
         this.showHint();
         // 获取文章具体内容
         this.fetchTopic(id)
-          .then(this.fetchUser);
+          .then(this.fetchUser)
+          .catch((e) => console.log(e));
         // 如果文章id存在于收藏列表中，将收藏状态设置为true.从而显示取消收藏按钮。。不存在则显示收藏按钮
         if (this.collection.has(id)) {
           this.changeCollectStatus(true);

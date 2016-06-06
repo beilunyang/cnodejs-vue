@@ -74,7 +74,8 @@
                 .then(() => {
                   this.$route.router.go({ name: 'index' });
                 })
-                .catch(() => {
+                .catch((e) => {
+                  console.log(e);
                   this.$route.router.go({ name: 'login' });
                 });
           } else {

@@ -89,7 +89,8 @@
               if (this.msgCount > 0) {
                 this.markAllMsg(this.token);
               }
-            });
+            })
+            .catch((e) => console.log(e));
       },
     },
   };

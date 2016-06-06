@@ -78,7 +78,8 @@
                 const redirect = decodeURIComponent(this.$route.query.redirect || '/');
                 this.$route.router.go(redirect);
               });
-          });
+          })
+          .catch((e) => console.log(e));
         }
       },
     },

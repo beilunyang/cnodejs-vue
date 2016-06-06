@@ -63,7 +63,8 @@
                 return info.loginname;
               })
               .then((name) => this.fetchCollection(name))
-              .then(() => this.fetchMsgCount(this.token));
+              .then(() => this.fetchMsgCount(this.token))
+              .catch((e) => console.log(e));
         }
       }
     },
